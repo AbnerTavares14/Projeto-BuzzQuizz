@@ -1,0 +1,99 @@
+*{
+    box-sizing: border-box;
+}
+
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+    width: 100%;
+    height: 69px;
+    background-color: #EC362D;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+header h1{
+    font-family: 'Roboto', sans-serif;
+    font-size: 37px;
+    font-weight: 700;
+    line-height: 43.36px;
+    color: #FFFFFF;
+}
+
+section{
+    width: 100%;
+    height: 181px;
+    background-color: #FAFAFA;
+    border: 1px dashed  #D4D4D4;
+    border-radius: 7px;
+    padding: 50px;
+    margin: 0 auto;
+}
+
+section h1{
+    font-family: 'Roboto', sans-serif;
+    width: 250px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23.44px;
+    color: #B9B9B9;
+    text-align: center;
+}
+
+.criar-quiz{
+    width: 151px;
+    height: 40px;
+    border: 1px dashed #EC362D;
+    border-radius: 50px;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 5px;
+}
+
+.criar-quiz p{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 24.61px;
+    color: #EC362D;
+    text-align: center;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    padding: 31px 20px;
+}
+
+main h2{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23.44px;
+    color: #000000;
+    margin-top: 30px;
+    margin-bottom: 14px;
+}
+
+figure{
+    position: relative;
+}
+
+
+figure p{
+    width: 301px;
+    position: absolute;
+    bottom: 20px;   
+    left: 30px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 19px;
+    text-align: center;
+    color: #FFFFFF ;
+    line-height: 22.27px
+}
+
+figure img{
+    width: 100%;
+}
