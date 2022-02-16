@@ -10,15 +10,15 @@ function listarTodosQuizzes(){
         resposta.data.forEach(element => {
             todosQuizzes.innerHTML += `
 
-                <div class="quizz">
+                <div class="quizz " id = ${element.id} >
                     <figure>
+                        <div class="degradê"></div>
                         <img src=${element.image} />
                         <p>${element.title}</p>
                     </figcation>    
                 </div>
             
             `
-            console.log(element)
         });
     })
 }
