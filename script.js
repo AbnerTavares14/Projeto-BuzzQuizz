@@ -10,16 +10,29 @@ function listarTodosQuizzes(){
         resposta.data.forEach(element => {
             todosQuizzes.innerHTML += `
 
-                <div class="quizz">
+                <div class="quizz " onclick ='exibirQuizz(${element.id})' >
                     <figure>
+                        <div class="degradê"></div>
                         <img src=${element.image} />
                         <p>${element.title}</p>
                     </figcation>    
                 </div>
             
             `
-            console.log(element)
         });
+    })
+}
+
+function exibirQuizz(quizz){
+    const promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes')
+
+    promise.then((resposta)=>{
+        resposta.data.forEach(element => {
+            if(element.id === quizz){
+            console.log(element) // vai criar a tela 2 
+            }
+        })
+
     })
 }
 
