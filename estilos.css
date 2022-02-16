@@ -21,7 +21,7 @@ header h1{
     color: #FFFFFF;
 }
 
-section{
+.criarQuizz{
     width: 100%;
     height: 181px;
     background-color: #FAFAFA;
@@ -31,7 +31,7 @@ section{
     margin: 0 auto;
 }
 
-section h1{
+.criarQuizz h1{
     font-family: 'Roboto', sans-serif;
     width: 250px;
     font-size: 20px;
@@ -76,8 +76,13 @@ main h2{
     margin-bottom: 14px;
 }
 
+.todosQuizzes .quizz{
+margin-bottom: 14px;
+}
+
 figure{
     position: relative;
+    
 }
 
 
@@ -96,4 +101,5 @@ figure p{
 
 figure img{
     width: 100%;
+    border-radius: 5px;
 }
