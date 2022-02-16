@@ -12,7 +12,7 @@ function listarTodosQuizzes(){
 
                 <div class="quizz " onclick ='exibirQuizz(${element.id})' >
                     <figure>
-                        <div class="degradê"></div>
+                        <div class="degrade"></div>
                         <img src=${element.image} />
                         <p>${element.title}</p>
                     </figcation>    
@@ -29,7 +29,48 @@ function exibirQuizz(quizz){
     promise.then((resposta)=>{
         resposta.data.forEach(element => {
             if(element.id === quizz){
-            console.log(element) // vai criar a tela 2 
+                document.querySelector('main').classList.add('mainTela2')
+                document.querySelector('.criarQuizz').classList.add('escondido')
+                document.querySelector('.todosQuizzes').classList.add('escondido')
+
+                const tela2 = document.querySelector('.tela2')
+                // console.log(element.questions[0])
+                tela2.innerHTML += `
+
+                <div class="banner" >
+                    <figure>
+                        <div class="degradeBanner"></div>
+                        <img src=${element.image} />
+                        <p>${element.title}</p>
+                    </figcation>    
+                </div>
+                <div class='perguntas'>
+                    <div class="pergunta01" >
+                        <div class="titulo">
+                        <h2>${element.questions[0].title}</h2>
+                        </div>
+                        <div class="opcoes">
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                `
+                const perguntaOpcoes = element.questions[0].answers
+                const opcoes = document.querySelector('.pergunta01 .opcoes')
+                perguntaOpcoes.forEach(element => {
+                    opcoes.innerHTML += `
+                        <figure>
+                            <img src=${element.image} />
+                            <p>${element.text}</p>
+                        </figcation>  
+                      
+                    `
+                    console.log(element)
+                })
+                
+                //console.log(element) // vai criar a tela 2 
             }
         })
 
