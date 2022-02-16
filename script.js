@@ -45,7 +45,7 @@ function exibirQuizz(quizz){
                     </figcation>    
                 </div>
                 <div class='perguntas'>
-                    <div class="pergunta01" >
+                    <div class=" pergunta pergunta01" >
                         <div class="titulo">
                         <h2>${element.questions[0].title}</h2>
                         </div>

@@ -165,28 +165,40 @@ figure .degradeBanner{
 .perguntas{
     display: flex;
     flex-direction: column;
+    align-items: center;
     background-color: yellow;
     justify-content: center;
 }
-
-.perguntas .titulo{
+.pergunta{
+    width: 340px;
+    margin-top: 42px;
+    background-color: gray;
+}
+.pergunta .titulo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     background-color: #EC362D;
+    
+    /* margin-bottom: 12px; */
     width: 340px;
     height: 89px;
 }
 
-.perguntas .opcoes {
+.pergunta .opcoes {
     background-color: aqua;
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.perguntas figure{
-    margin-right: 12px;
+.pergunta figure{
+    margin-top: 12px;
+    background-color: green;
 }
 
-.perguntas .opcoes:nth-child(2n){ margin-right: 0px;}
+/* .pergunta .opcoes:nth-child(2n){ margin-bottom: 0px;} */
 
 .perguntas .opcoes img{
     width: 163px;
