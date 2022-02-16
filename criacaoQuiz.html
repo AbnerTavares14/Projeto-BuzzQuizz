@@ -19,17 +19,23 @@
     <header>
         <h1>BuzzQuizz</h1>
     </header>
-    <main>
-        <section class="criarQuizz">
-            <h1>Você não criou nenhum quizz ainda :(</h1>
-            <div class="criar-quiz">
-                <p onclick="criarQuiz()">Criar Quizz</p>
+    <main class="tela3">
+        <h1>Comece pelo começo</h1>
+        <section class="inicio">
+            <div class="titulo">
+                <input class="titulo1" type="textarea" placeholder="Título do seu quizz">
             </div>
+            <div class="url">
+                <input class="url1" type="url" placeholder="URL da imagem do seu quizz"/>
+            </div>
+            <div class="perguntas">
+                <input class="perguntas1" type="textarea" placeholder="Quantidade de perguntas do quizz" />
+            </div>
+            <div class="niveis">
+                <input class="niveis1" type="textarea" placeholder="Quantidade de níveis do quizz"/>
+            </div>
+            <button class="p-perguntas" onclick="irCriarPerguntas()"><p>Prosseguir pra criar perguntas</p></button> 
         </section>
-        <section class="todosQuizzes">
-
-        </section>
-
     </main>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"> </script>
     <script src="script.js"> </script>

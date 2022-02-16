@@ -103,3 +103,56 @@ figure img{
     width: 100%;
     border-radius: 5px;
 }
+
+.tela3{
+    padding: 10px;
+}
+
+.tela3 h1{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    width: 195px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 20px    ;
+    margin-bottom: 50px;
+}
+
+input{
+    border: 1px solid #D1D1D1;
+    border-radius: 5px;
+    width: 98%;
+    height: 46px;
+    margin: 5px ;
+    outline: none;
+}
+
+input::placeholder{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 19px;
+    color: #BABABA;
+    font-style: italic;
+    padding: 10px;
+}
+
+.p-perguntas{
+    width: 324px;
+    height: 54px;
+    background-color: #EC362D;
+    border-radius: 15px;
+    border: 0 none;
+    outline: none;
+    margin-top: 53px;
+    margin-left: 25px;
+}
+
+.p-perguntas p{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21.09px;
+    color: #FFF5F4;
+}
+
