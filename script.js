@@ -1,6 +1,8 @@
 let qtdNiveis = null;
 let qtdPerguntas = null;
+let guardaCor = null;
 
+const corHex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
 
 function listarTodosQuizzes() {
 
@@ -182,10 +184,11 @@ function validaInformacoesPerguntas() {
     const respostaIncorreta = [...document.querySelectorAll(".resposta-incorreta")];
     const urlCorreta = [...document.querySelectorAll(".url-correta")];
     let flag = true; // Mesma estrategia da flag anterior
+    let cont = 0;
     //laço para validar o formato URL. Nesse caso, usei uma estratégia contrária, caso o valor retornado de algum elemento do array for -1
     // Mudo a flag para false e forço a saída do laço
     for (let i = 0; i < urlCorreta.length; i++) {
-        if (((urlCorreta[i].indexOf("http://") === -1) || (urlCorreta[i].indexOf("https://") === -1))) {
+        if (((urlCorreta[i].indexOf("http://") === -1) && (urlCorreta[i].indexOf("https://") === -1))) {
             flag = false;
             break;
         }
@@ -194,7 +197,10 @@ function validaInformacoesPerguntas() {
     //Limparia os campos e emitira e alert, ainda não foi feito o alert
     respostaIncorreta.forEach(element => {
         if (element.value === null) {
-            controlador = false
+            cont++;
+        }
+        if(element.length === cont){
+
             pergunta.forEach(element => {
                 element.value = '';
             });
@@ -207,14 +213,19 @@ function validaInformacoesPerguntas() {
             urlCorreta.forEach(element => {
                 element.value = '';
             });
+            color.forEach(element => {
+                element.value = '';
+            });
+            alert("Por favor preencha os dados corretamente!");
         }
-    });
+        });
 
     //Laço que verifica se a pergunta tem menos de 20 caracteres, se a resposta correta está vazia e se a url não tem formato de url.
     //Caso as validaçoes sejam verdadeiras, os campos dos inputs são limpados, é emitido um alert e forçado um break no laço
     for (let i = 0; i < pergunta.length; i++) {
-        if (pergunta[i].value.lenght < 20 || respostaCorreta[i].value.lenght === null || flag === false) {
-            controlador = false
+
+        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || flag === false || !verificaColor(color)) {
+
             pergunta.forEach(element => {
                 element.value = '';
             });
@@ -227,8 +238,29 @@ function validaInformacoesPerguntas() {
             urlCorreta.forEach(element => {
                 element.value = '';
             });
+            color.forEach(element => {
+                element.value = '';
+            });
             alert("Por favor preencha os dados corretamente!");
             break;
+        }else{
+            pergunta.forEach(element => {
+                element.value = '';
+            });
+            respostaCorreta.forEach(element => {
+                element.value = '';
+            });
+            respostaIncorreta.forEach(element => {
+                element.value = '';
+            });
+            urlCorreta.forEach(element => {
+                element.value = '';
+            });
+
+            color.forEach(element => {
+                element.value = '';
+            });
+
         }
     }
 
@@ -238,4 +270,19 @@ function validaInformacoesPerguntas() {
 }
 
 
-
+function verificaColor(elemento){
+    elemento.forEach(element => {
+        if(element.indexOf("#") !== -1) {
+            if (element.length === 7){
+                for(let i = 0; i < 7;i++){
+                    for(let j = 0; j < corHex; j++){
+                        if(element.indexOf(corHex[j]) === -1){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    return true;
+}
