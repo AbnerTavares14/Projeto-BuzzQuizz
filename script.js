@@ -112,7 +112,6 @@ function validaInformacoesBasicas(){
         let limpaNiveis = document.querySelector(".niveis1");
         limpaNiveis.value = "";
         criarPerguntas();
-        // window.location.href = "criacaoQuizPerguntas.html";
     }else{
         alert("Por favor, preencha os dados corretamente!");
         let limpaTitulo = document.querySelector(".titulo1");
@@ -127,31 +126,87 @@ function validaInformacoesBasicas(){
     }
 }
 
-// function criarPerguntas(){
-//     const pergunta = document.querySelector(".tela3-perguntas");
-//     for(let i = 0; i < qtdPerguntas; i++){
-//         pergunta.innerHTML += `<h1>Crie suas perguntas</h1>
-//         <section class="perguntas-respostas">
-//             <div class="pergunta">
-//                 <div.texto>
-//                     <h2>Pergunta ${i+1}</h2>
-//                     <ion-icon name="create-outline" onclick="apareceCriacaoDaPergunta()"></ion-icon>
-//                 </div>
-//                 <div class="pergunta${i+1}">
-//                 <input type="textarea" class="questao" placeholder="Texto da pergunta">
-//                 <input type="color" class="textarea" placeholder="Cor de fundo da pergunta">
-//                 <h2>Resposta correta</h2>
-//                 <input type="textarea" class="resposta-correta" placeholder="Resposta correta">
-//                 <input type="url" class="url-correta">
-//                 <h2>Respostas incorretas</h2>
-//                 <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 1">
-//                 <input type="url" class="URL-resposta" placeholder="URL da imagem 1">
-//                 <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 2">
-//                 <input type="url" class="URL-resposta" placeholder="URL da imagem 2">
-//                 <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 3">
-//                 <input type="url" class="URL-resposta" placeholder="URL da imagem 3">
-//                 </div>
-//             </div>`
-//     }
-// }
+function apareceCriacaoDaPergunta(elemento, pergunta){
+    const acontece = document.querySelector(`.${pergunta}`);
+    acontece.classList.remove("escondido");
+    elemento.classList.add("escondido");
+}
+
+function criarPerguntas(){
+    const pergunta = document.querySelector(".tela3-perguntas");
+    const remocao = document.querySelector(".tela3");
+    remocao.classList.add("escondido");
+    pergunta.classList.remove("escondido");
+    for(let i = 0; i < qtdPerguntas-1; i++){
+        pergunta.innerHTML += `<div class="selecione">
+        <h2>Pergunta ${i+2}</h2>
+        <ion-icon name="create-outline" onclick="apareceCriacaoDaPergunta(this, 'p${i+2}')"></ion-icon>
+    </div>
+    <div class="cria-pergunta p${i+2} escondido">
+        <input type="textarea" class="questao" placeholder="Texto da pergunta">
+        <input type="textarea" class="color" placeholder="Cor de fundo da pergunta">
+        <h2>Resposta correta</h2>
+        <input type="textarea" class="resposta-correta" placeholder="Resposta correta">
+        <input type="url" class="url-correta" placeholder="URL da imagem">
+        <h2>Respostas incorretas</h2>
+        <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 1">
+        <input type="url" class="url-resposta" placeholder="URL da imagem 1">
+        <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 2">
+        <input type="url" class="url-resposta" placeholder="URL da imagem 2">
+        <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 3">
+        <input type="url" class="url-resposta" placeholder="URL da imagem 3">
+    </div>`
+    }
+    pergunta.innerHTML += `<button class="p-perguntas" onclick="validaInformacoesPerguntas()"><p> Prosseguir pra criar níveis </p></button>`;
+}
+
+function validaInformacoesPerguntas(){
+    const pergunta = [...document.querySelectorAll(".questao")];
+    const color = document.querySelectorAll(".color");
+    const respostaCorreta = [...document.querySelectorAll(".resposta-correta")];
+    const respostaIncorreta = [...document.querySelectorAll(".resposta-incorreta")];
+    const urlCorreta = [...document.querySelectorAll(".url-correta")];
+    let flag = true;
+    for(let i = 0; i < urlCorreta.length; i++){
+        if(((urlCorreta.indexOf("http://") === -1)||(urlCorreta.indexOf("https://") === -1))){
+            flag = false;
+        }
+    }
+
+    respostaIncorreta.forEach(element => {
+       if(element.value === null){
+        pergunta.forEach(element => {
+            element.value = '';
+        });
+        respostaCorreta.forEach(element => {
+            element.value = '';
+        });
+        respostaIncorreta.forEach(element => {
+            element.value = '';
+        });
+        urlCorreta.forEach(element => {
+            element.value = '';
+        });
+       } 
+    });
+
+    for(let i = 0; i < pergunta.length; i++){
+        if(pergunta[i].value.lenght < 20 || respostaCorreta[i].value.lenght === null || flag === false){
+            pergunta.forEach(element => {
+                element.value = '';
+            });
+            respostaCorreta.forEach(element => {
+                element.value = '';
+            });
+            respostaIncorreta.forEach(element => {
+                element.value = '';
+            });
+            urlCorreta.forEach(element => {
+                element.value = '';
+            });
+            alert("Por favor preencha os dados corretamente!");
+            break;
+        }
+    }
+}
 
