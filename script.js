@@ -175,6 +175,7 @@ function criarPerguntas() {
 
 //Funcao que valida as informacoes digitadas na tela 3.1, funcao incompleta, ainda não está funcionando
 function validaInformacoesPerguntas() {
+    const controlador = true
     const pergunta = [...document.querySelectorAll(".questao")]; //Aqui eu tento converter a lista retornada pelo querySelectorAll em um array.
     const color = document.querySelectorAll(".color");
     const respostaCorreta = [...document.querySelectorAll(".resposta-correta")];
@@ -193,6 +194,7 @@ function validaInformacoesPerguntas() {
     //Limparia os campos e emitira e alert, ainda não foi feito o alert
     respostaIncorreta.forEach(element => {
         if (element.value === null) {
+            controlador = false
             pergunta.forEach(element => {
                 element.value = '';
             });
@@ -212,6 +214,7 @@ function validaInformacoesPerguntas() {
     //Caso as validaçoes sejam verdadeiras, os campos dos inputs são limpados, é emitido um alert e forçado um break no laço
     for (let i = 0; i < pergunta.length; i++) {
         if (pergunta[i].value.lenght < 20 || respostaCorreta[i].value.lenght === null || flag === false) {
+            controlador = false
             pergunta.forEach(element => {
                 element.value = '';
             });
@@ -227,6 +230,10 @@ function validaInformacoesPerguntas() {
             alert("Por favor preencha os dados corretamente!");
             break;
         }
+    }
+
+    if(controlador === true){
+        alert("Deu certo!");
     }
 }
 
