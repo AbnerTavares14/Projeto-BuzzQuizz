@@ -46,17 +46,21 @@ function exibirQuizz(quizz){
                 </div>
                 <div class='perguntas'>
                     <div class=" pergunta pergunta01" >
-                        <div class="titulo">
-                        <h2>${element.questions[0].title}</h2>
-                        </div>
-                        <div class="opcoes">
-                            
+                        <div class= "conteudo">
+                            <div class="titulo">
+                            <h3>${element.questions[0].title}</h3>
+                            </div>
+                            <div class="opcoes">
+                                
+                            </div>
                         </div>
                         
                     </div>
                 </div>
                 
                 `
+                const cor = element.questions[0].color
+                document.querySelector('.pergunta01 .titulo').style.background = cor;
                 const perguntaOpcoes = element.questions[0].answers
                 const opcoes = document.querySelector('.pergunta01 .opcoes')
                 perguntaOpcoes.forEach(element => {
@@ -70,7 +74,7 @@ function exibirQuizz(quizz){
                     console.log(element)
                 })
                 
-                //console.log(element) // vai criar a tela 2 
+                console.log(element) // vai criar a tela 2 
             }
         })
 

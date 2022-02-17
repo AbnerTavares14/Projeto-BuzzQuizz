@@ -166,36 +166,53 @@ figure .degradeBanner{
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: yellow;
     justify-content: center;
 }
+
 .pergunta{
-    width: 340px;
-    margin-top: 42px;
-    background-color: gray;
+    width: 100%;
+    display: flex;
+    margin-top: 24px;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 }
-.pergunta .titulo{
+
+.pergunta .conteudo{
+    width: 340px;
+    margin-top: 18px;
+    margin-bottom: 23px;
+}
+.conteudo .titulo{
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: #EC362D;
-    
-    /* margin-bottom: 12px; */
     width: 340px;
     height: 89px;
+    
+
 }
 
-.pergunta .opcoes {
-    background-color: aqua;
+.conteudo .titulo h3{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 19px;
+    line-height: 22px;
+    color: #FFFFFF;
+
+}
+
+.conteudo .opcoes {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
-.pergunta figure{
+.conteudo figure{
     margin-top: 12px;
-    background-color: green;
 }
 
 /* .pergunta .opcoes:nth-child(2n){ margin-bottom: 0px;} */
