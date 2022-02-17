@@ -1,3 +1,6 @@
+let qtdNiveis = null;
+let qtdPerguntas = null;
+
 
 function listarTodosQuizzes(){
 
@@ -42,7 +45,7 @@ function criarQuiz(){
     window.location.href = "criacaoQuiz.html";
 }
 
-function irCriarPerguntas(){
+function validaInformacoesBasicas(){
     const titulo = document.querySelector(".titulo1").value;
     const url = document.querySelector(".url1").value;
     const perguntas = document.querySelector(".perguntas1").value;
@@ -53,6 +56,8 @@ function irCriarPerguntas(){
         flag = true;
     }
     if((titulo.length >= 20 && titulo.length <= 65) && (niveis >= 2) && (perguntas >= 3) && flag === true ){
+        qtdNiveis = niveis;
+        qtdPerguntas = perguntas;
         let limpaTitulo = document.querySelector(".titulo1");
         limpaTitulo.value = "";
         let limpaURL = document.querySelector(".url1");
@@ -61,7 +66,8 @@ function irCriarPerguntas(){
         limpaPerguntas.value = "";
         let limpaNiveis = document.querySelector(".niveis1");
         limpaNiveis.value = "";
-        window.location.href = "https://www.google.com/"; 
+        criarPerguntas();
+        // window.location.href = "criacaoQuizPerguntas.html";
     }else{
         alert("Por favor, preencha os dados corretamente!");
         let limpaTitulo = document.querySelector(".titulo1");
@@ -75,3 +81,32 @@ function irCriarPerguntas(){
         window.location.reload;
     }
 }
+
+// function criarPerguntas(){
+//     const pergunta = document.querySelector(".tela3-perguntas");
+//     for(let i = 0; i < qtdPerguntas; i++){
+//         pergunta.innerHTML += `<h1>Crie suas perguntas</h1>
+//         <section class="perguntas-respostas">
+//             <div class="pergunta">
+//                 <div.texto>
+//                     <h2>Pergunta ${i+1}</h2>
+//                     <ion-icon name="create-outline" onclick="apareceCriacaoDaPergunta()"></ion-icon>
+//                 </div>
+//                 <div class="pergunta${i+1}">
+//                 <input type="textarea" class="questao" placeholder="Texto da pergunta">
+//                 <input type="color" class="textarea" placeholder="Cor de fundo da pergunta">
+//                 <h2>Resposta correta</h2>
+//                 <input type="textarea" class="resposta-correta" placeholder="Resposta correta">
+//                 <input type="url" class="url-correta">
+//                 <h2>Respostas incorretas</h2>
+//                 <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 1">
+//                 <input type="url" class="URL-resposta" placeholder="URL da imagem 1">
+//                 <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 2">
+//                 <input type="url" class="URL-resposta" placeholder="URL da imagem 2">
+//                 <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 3">
+//                 <input type="url" class="URL-resposta" placeholder="URL da imagem 3">
+//                 </div>
+//             </div>`
+//     }
+// }
+
