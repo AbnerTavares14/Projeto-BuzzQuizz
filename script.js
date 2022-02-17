@@ -37,7 +37,7 @@ function exibirQuizz(quizz){
                 document.querySelector('.todosQuizzes').classList.add('escondido')
 
                 const tela2 = document.querySelector('.tela2')
-                // console.log(element.questions[0])
+                
                 tela2.innerHTML += `
 
                 <div class="banner" >
@@ -56,12 +56,12 @@ function exibirQuizz(quizz){
                             <div class="opcoes">
                                 
                             </div>
-                        </div>
-                        
+                        </div>    
                     </div>
                 </div>
                 
                 `
+
                 const cor = element.questions[0].color
                 document.querySelector('.pergunta01 .titulo').style.background = cor;
                 const perguntaOpcoes = element.questions[0].answers
@@ -209,4 +209,6 @@ function validaInformacoesPerguntas(){
         }
     }
 }
+
+
 
