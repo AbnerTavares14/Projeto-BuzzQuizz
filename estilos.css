@@ -82,12 +82,12 @@ main h2{
     
 }
 
-figure{
+.quizz figure{
     position: relative;
      
 }
 
-figure .degradê{
+.quizz figure .degrade{
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%);
     width: 100%;
     height: 100%;
@@ -96,7 +96,7 @@ figure .degradê{
 }
 
 
-figure p{
+.quizz figure p{
     width: 301px;
     position: absolute;
     bottom: 20px;   
@@ -109,10 +109,119 @@ figure p{
     line-height: 22.27px
 }
 
-figure img{
+
+.quizz figure img{
     width: 100%;
     border-radius: 5px;
 }
+
+.escondido{ display: none;}
+.mainTela2{
+    padding: 0px;
+}
+
+.tela2{
+    width: 100%;
+}
+
+.banner{
+    width: 100%;
+    height: 142px;
+    
+}
+.banner figure{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 142px;
+}
+
+.banner figure p{
+
+    position: absolute;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 19px;
+    text-align: center;
+    color: #FFFFFF ;
+}
+
+.banner figure img{
+    width: 100%;
+    height: 142px;
+}
+
+
+figure .degradeBanner{
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+    width: 100%;
+    height: 142px;
+    position: absolute;
+    
+}
+
+.perguntas{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pergunta{
+    width: 100%;
+    display: flex;
+    margin-top: 24px;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.pergunta .conteudo{
+    width: 340px;
+    margin-top: 18px;
+    margin-bottom: 23px;
+}
+.conteudo .titulo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 340px;
+    height: 89px;
+    
+
+}
+
+.conteudo .titulo h3{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 19px;
+    line-height: 22px;
+    color: #FFFFFF;
+
+}
+
+.conteudo .opcoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.conteudo figure{
+    margin-top: 12px;
+}
+
+/* .pergunta .opcoes:nth-child(2n){ margin-bottom: 0px;} */
+
+.perguntas .opcoes img{
+    width: 163px;
+    height: 113px;
+}
+
 
 .tela3{
     padding: 10px;
