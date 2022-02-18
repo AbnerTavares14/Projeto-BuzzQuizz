@@ -32,14 +32,14 @@ function exibirQuizz(quizz) {
     const promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes')
 
     promise.then((resposta) => {
+        console.log(resposta.data);
         resposta.data.forEach(element => {
             if (element.id === quizz) {
                 document.querySelector('main').classList.add('mainTela2')
                 document.querySelector('.criarQuizz').classList.add('escondido')
                 document.querySelector('.todosQuizzes').classList.add('escondido')
-
-                const tela2 = document.querySelector('.tela2')
                 console.log(element.questions);
+                const tela2 = document.querySelector('.tela2')
                 tela2.innerHTML += `
 
                 <div class="banner" >
@@ -48,36 +48,41 @@ function exibirQuizz(quizz) {
                         <img src=${element.image} />
                         <p>${element.title}</p>
                     </figcation>    
-                </div>
-                <div class='perguntas'>
-                    <div class=" pergunta pergunta01" >
-                        <div class= "conteudo">
-                            <div class="titulo">
-                            <h3>${element.questions[0].title}</h3>
-                            </div>
-                            <div class="opcoes">
-                                
-                            </div>
-                        </div>    
+                </div>` 
+                for(let i = 0; i < element.questions.length; i++){
+                    tela2.innerHTML += `
+                    <div class='perguntas'>
+                        <div class=" pergunta pergunta${i+1}" >
+                            <div class= "conteudo">
+                                <div class="titulo">
+                                <h3>${element.questions[i].title}</h3>
+                                <img src=${element.questions[i].answers[i].image}/>
+                                </div>
+                                <div class="opcoes">
+                                    
+                                </div>
+                            </div>    
+                        </div>
                     </div>
-                </div>
-                
-                `
-
-                const cor = element.questions[0].color
-                document.querySelector('.pergunta01 .titulo').style.background = cor;
-                const perguntaOpcoes = element.questions[0].answers
-                const opcoes = document.querySelector('.pergunta01 .opcoes')
-                perguntaOpcoes.forEach(element => {
-                    opcoes.innerHTML += `
-                        <figure>
-                            <img src=${element.image} />
-                            <p>${element.text}</p>
-                        </figcation>  
-                      
+                    
                     `
-                    console.log(element)
-                })
+                }
+                for(let i = 0; i < element.questions.length; i++){
+                    const cor = element.questions[i].color
+                    document.querySelector(`.pergunta${i} .titulo`).style.background = cor;
+                    let perguntaOpcoes = element.questions[i].answers;
+                    let opcoes = document.querySelector(`.pergunta${i+1} .opcoes`);
+                    perguntaOpcoes.forEach(element => {
+                        opcoes.innerHTML += `
+                            <figure>
+                                <img src=${element.image} />
+                                <p>${element.text}</p>
+                            </figcation>  
+                          
+                        `
+                        console.log(element)
+                    })
+                }
 
                 console.log(element) // vai criar a tela 2 
             }

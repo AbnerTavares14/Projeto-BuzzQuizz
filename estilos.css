@@ -145,6 +145,7 @@ main h2{
     font-weight: 400;
     font-size: 19px;
     text-align: center;
+    width: 300px;
     color: #FFFFFF ;
 }
 
@@ -175,7 +176,7 @@ figure .degradeBanner{
     margin-top: 24px;
     align-items: center;
     justify-content: center;
-    background: #FFFFFF;
+    /* background: #FFFFFF; */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 }
 
@@ -201,8 +202,12 @@ figure .degradeBanner{
     font-weight: bold;
     font-size: 19px;
     line-height: 22px;
-    color: #FFFFFF;
+    /* color: #FFFFFF; */
+}
 
+.conteudo .titulo img{
+    width: 150px;
+    height: 50px;
 }
 
 .conteudo .opcoes {
