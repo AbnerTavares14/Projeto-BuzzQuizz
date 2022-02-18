@@ -38,11 +38,8 @@ function exibirQuizz(quizz) {
                 document.querySelector('main').classList.add('mainTela2')
                 document.querySelector('.criarQuizz').classList.add('escondido')
                 document.querySelector('.todosQuizzes').classList.add('escondido')
-
-                const tela2 = document.querySelector('.tela2')
                 console.log(element.questions);
-                console.log(element.image);
-                console.log(element.title);
+                const tela2 = document.querySelector('.tela2')
                 tela2.innerHTML += `
 
                 <div class="banner" >
@@ -59,6 +56,7 @@ function exibirQuizz(quizz) {
                             <div class= "conteudo">
                                 <div class="titulo">
                                 <h3>${element.questions[i].title}</h3>
+                                <img src=${element.questions[i].answers[i].image}/>
                                 </div>
                                 <div class="opcoes">
                                     
@@ -71,9 +69,9 @@ function exibirQuizz(quizz) {
                 }
                 for(let i = 0; i < element.questions.length; i++){
                     const cor = element.questions[i].color
-                    document.querySelector('.pergunta01 .titulo').style.background = cor;
+                    document.querySelector(`.pergunta${i} .titulo`).style.background = cor;
                     let perguntaOpcoes = element.questions[i].answers;
-                    let opcoes = document.querySelector(`.pergunta0${i+1} .opcoes`);
+                    let opcoes = document.querySelector(`.pergunta${i+1} .opcoes`);
                     perguntaOpcoes.forEach(element => {
                         opcoes.innerHTML += `
                             <figure>

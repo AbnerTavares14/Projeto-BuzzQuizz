@@ -203,7 +203,11 @@ figure .degradeBanner{
     font-size: 19px;
     line-height: 22px;
     /* color: #FFFFFF; */
+}
 
+.conteudo .titulo img{
+    width: 150px;
+    height: 50px;
 }
 
 .conteudo .opcoes {
