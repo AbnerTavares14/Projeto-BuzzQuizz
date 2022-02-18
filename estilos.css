@@ -197,12 +197,12 @@ figure .degradeBanner{
 }
 
 .conteudo .titulo h3{
-    font-family: Roboto;
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 19px;
     line-height: 22px;
-    /* color: #FFFFFF; */
+    color: #FFFFFF;
 }
 
 .conteudo .titulo img{
@@ -225,6 +225,25 @@ figure .degradeBanner{
 .perguntas .opcoes img{
     width: 163px;
     height: 113px;
+}
+
+.perguntas .opcoes .h3{
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    /* line-height: 15.23px; */
+}
+
+.nao-selecionado{
+    opacity: 0.3;
+}
+
+.correto{
+    color: #009C22;
+}
+
+.incorreto{
+    color: #FF4B4B;
 }
 
 
