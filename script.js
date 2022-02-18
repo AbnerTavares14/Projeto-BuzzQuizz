@@ -187,37 +187,29 @@ function validaInformacoesPerguntas() {
     let cont = 0;
     //laço para validar o formato URL. Nesse caso, usei uma estratégia contrária, caso o valor retornado de algum elemento do array for -1
     // Mudo a flag para false e forço a saída do laço
+    
     for (let i = 0; i < urlCorreta.length; i++) {
-        if (((urlCorreta[i].indexOf("http://") === -1) && (urlCorreta[i].indexOf("https://") === -1))) {
+
+        if (((urlCorreta[i].value.indexOf("http://") === -1) && (urlCorreta[i].value.indexOf("https://") === -1))) {
             flag = false;
             break;
         }
     }
     //Aqui tentei usar o forEach para verificar se os campos das respostas incorretas não estavam nulos. Caso algum campo estivesse, 
     //Limparia os campos e emitira e alert, ainda não foi feito o alert
-    respostaIncorreta.forEach(element => {
-        if (element.value === null) {
+    respostaIncorreta.forEach((element,indice) => {
+
+        if (element.value === "") {
             cont++;
         }
-        if(element.length === cont){
 
-            pergunta.forEach(element => {
-                element.value = '';
-            });
-            respostaCorreta.forEach(element => {
-                element.value = '';
-            });
-            respostaIncorreta.forEach(element => {
-                element.value = '';
-            });
-            urlCorreta.forEach(element => {
-                element.value = '';
-            });
-            color.forEach(element => {
-                element.value = '';
-            });
+        if((indice+1) % 3 === 0 && cont > 2){
             alert("Por favor preencha os dados corretamente!");
+            limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
+            console.log(cont)
+            cont = 0
         }
+
         });
 
     //Laço que verifica se a pergunta tem menos de 20 caracteres, se a resposta correta está vazia e se a url não tem formato de url.
@@ -226,57 +218,47 @@ function validaInformacoesPerguntas() {
 
         if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || flag === false || !verificaColor(color)) {
 
-            pergunta.forEach(element => {
-                element.value = '';
-            });
-            respostaCorreta.forEach(element => {
-                element.value = '';
-            });
-            respostaIncorreta.forEach(element => {
-                element.value = '';
-            });
-            urlCorreta.forEach(element => {
-                element.value = '';
-            });
-            color.forEach(element => {
-                element.value = '';
-            });
+            limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color);
             alert("Por favor preencha os dados corretamente!");
             break;
         }else{
-            pergunta.forEach(element => {
-                element.value = '';
-            });
-            respostaCorreta.forEach(element => {
-                element.value = '';
-            });
-            respostaIncorreta.forEach(element => {
-                element.value = '';
-            });
-            urlCorreta.forEach(element => {
-                element.value = '';
-            });
-
-            color.forEach(element => {
-                element.value = '';
-            });
+            limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
+            criarNiveis()
+            console.log("deu certo")
 
         }
     }
 
-    if(controlador === true){
-        alert("Deu certo!");
-    }
+}
+
+function limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color){
+
+    pergunta.forEach(element => {
+        element.value = '';
+    });
+    respostaCorreta.forEach(element => {
+        element.value = '';
+    });
+    respostaIncorreta.forEach(element => {
+        element.value = '';
+    });
+    urlCorreta.forEach(element => {
+        element.value = '';
+    });
+    color.forEach(element => {
+        element.value = '';
+    });
+
 }
 
 
 function verificaColor(elemento){
     elemento.forEach(element => {
-        if(element.indexOf("#") !== -1) {
-            if (element.length === 7){
+        if(element.value.indexOf("#") !== -1) {
+            if (element.value.length === 7){
                 for(let i = 0; i < 7;i++){
                     for(let j = 0; j < corHex; j++){
-                        if(element.indexOf(corHex[j]) === -1){
+                        if(element.value.indexOf(corHex[j]) === -1){
                             return false;
                         }
                     }
@@ -285,4 +267,8 @@ function verificaColor(elemento){
         }
     });
     return true;
+}
+
+function criarNiveis(){
+    
 }
