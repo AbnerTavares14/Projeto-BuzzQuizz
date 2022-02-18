@@ -32,13 +32,13 @@ function exibirQuizz(quizz) {
     const promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes')
 
     promise.then((resposta) => {
-        console.log(resposta.data);
+        // console.log(resposta.data);
         resposta.data.forEach(element => {
             if (element.id === quizz) {
                 document.querySelector('main').classList.add('mainTela2')
                 document.querySelector('.criarQuizz').classList.add('escondido')
                 document.querySelector('.todosQuizzes').classList.add('escondido')
-                console.log(element.questions);
+                // console.log(element.questions);
                 const tela2 = document.querySelector('.tela2')
                 tela2.innerHTML += `
 
@@ -56,39 +56,85 @@ function exibirQuizz(quizz) {
                             <div class= "conteudo">
                                 <div class="titulo">
                                 <h3>${element.questions[i].title}</h3>
-                                <img src=${element.questions[i].answers[i].image}/>
                                 </div>
                                 <div class="opcoes">
-                                    
+                                
                                 </div>
-                            </div>    
-                        </div>
-                    </div>
-                    
-                    `
-                }
-                for(let i = 0; i < element.questions.length; i++){
-                    const cor = element.questions[i].color
-                    document.querySelector(`.pergunta${i} .titulo`).style.background = cor;
-                    let perguntaOpcoes = element.questions[i].answers;
-                    let opcoes = document.querySelector(`.pergunta${i+1} .opcoes`);
-                    perguntaOpcoes.forEach(element => {
-                        opcoes.innerHTML += `
-                            <figure>
-                                <img src=${element.image} />
-                                <p>${element.text}</p>
-                            </figcation>  
-                          
-                        `
-                        console.log(element)
-                    })
-                }
-
+                                </div>    
+                                </div>
+                                </div>
+                                
+                                `
+                            }
+                        
+                            for(let i = 0; i < element.questions.length; i++){
+                                if(element.isCorrectAnswer){ 
+                                    const cor = element.questions[i].color
+                                    document.querySelector(`.pergunta${i+1} .titulo`).style.background = cor;
+                                    let perguntaOpcoes = element.questions[i].answers;
+                                    let opcoes = document.querySelector(`.pergunta${i+1} .opcoes`);
+                                    // console.log(element.image);
+                                    perguntaOpcoes.forEach(element => {
+                                        opcoes.innerHTML += `
+                                        <figure class="certo" onclick="selecionaResposta(this, 'pergunta${i+1}', ${element.isCorrectAnswer})">
+                                        <img src=${element.image} />
+                                        <p>${element.text}</p>
+                                        </figcation>  
+                                        
+                                        `
+                                    })
+                                }else{
+                                    const cor = element.questions[i].color
+                                    document.querySelector(`.pergunta${i+1} .titulo`).style.background = cor;
+                                    let perguntaOpcoes = element.questions[i].answers;
+                                    let opcoes = document.querySelector(`.pergunta${i+1} .opcoes`);
+                                    // console.log(element.image);
+                                    perguntaOpcoes.forEach(element => {
+                                        opcoes.innerHTML += `
+                                        <figure class="errado" onclick="selecionaResposta(this, 'pergunta${i+1}', ${element.isCorrectAnswer})">
+                                        <img src=${element.image} />
+                                        <p>${element.text}</p>
+                                        </figcation>  
+                                        
+                                        `
+                                    })
+                                }
+                            }
+                            
+                            // <img src=${element.questions[i].answers[i].image}/>
                 console.log(element) // vai criar a tela 2 
             }
         })
 
     })
+}
+
+
+function selecionaResposta(elemento, numPergunta, resposta){
+    const elementos = [...document.querySelectorAll(`.${numPergunta} .opcoes figure`)];
+    const certo = document.querySelector(`.${numPergunta} .opcoes .certo`);
+    elementos.forEach(elmts => {
+        elmts.classList.add("nao-selecionado");
+    });
+    let guardaElemento = elemento.children;
+    // let guardaCerto = certo.children;
+    console.log(elemento.children);
+    elemento.classList.remove("nao-selecionado");
+    if(resposta === true){
+        guardaElemento[1].classList.add("correto");
+        elementos.forEach(elmts =>{
+            if(elmts !== elemento){
+                elmts.classList.add("incorreto");
+            }
+        })
+    }else{
+        // elemento.classList.add("incorreto");
+        elementos.forEach(elmts => {
+            elmts.classList.add("incorreto");
+        });  
+        // certo.classList.remove("incorreto");
+        // guardaCerto[1].classList.add("correto");
+    }
 }
 
 listarTodosQuizzes()
