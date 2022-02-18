@@ -2,7 +2,7 @@ let qtdNiveis = null;
 let qtdPerguntas = null;
 let guardaCor = null;
 
-const corHex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+const corHex = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
 
 function listarTodosQuizzes() {
 
@@ -29,111 +29,85 @@ function listarTodosQuizzes() {
 }
 
 function exibirQuizz(quizz) {
-    const promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes')
+    const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizz}`);
 
     promise.then((resposta) => {
+        let element = resposta.data;
         // console.log(resposta.data);
-        resposta.data.forEach(element => {
-            if (element.id === quizz) {
-                document.querySelector('main').classList.add('mainTela2')
-                document.querySelector('.criarQuizz').classList.add('escondido')
-                document.querySelector('.todosQuizzes').classList.add('escondido')
-                // console.log(element.questions);
-                const tela2 = document.querySelector('.tela2')
-                tela2.innerHTML += `
-
+        // resposta.data.forEach(element => {
+        // if (element.id === quizz) {
+        document.querySelector('main').classList.add('mainTela2')
+        document.querySelector('.criarQuizz').classList.add('escondido')
+        document.querySelector('.todosQuizzes').classList.add('escondido')
+        // console.log(element.questions);
+        const tela2 = document.querySelector('.tela2')
+        tela2.innerHTML += `
                 <div class="banner" >
                     <figure>
                         <div class="degradeBanner"></div>
                         <img src=${element.image} />
                         <p>${element.title}</p>
                     </figcation>    
-                </div>` 
-                for(let i = 0; i < element.questions.length; i++){
-                    tela2.innerHTML += `
+                </div>
+                `
+        for (let i = 0; i < element.questions.length; i++) {
+            tela2.innerHTML += `
                     <div class='perguntas'>
-                        <div class=" pergunta pergunta${i+1}" >
+                        <div class=" pergunta pergunta${i + 1}" >
                             <div class= "conteudo">
                                 <div class="titulo">
-                                <h3>${element.questions[i].title}</h3>
+                                    <h3>${element.questions[i].title}</h3>
                                 </div>
-                                <div class="opcoes">
-                                
-                                </div>
-                                </div>    
-                                </div>
-                                </div>
-                                
-                                `
-                            }
-                        
-                            for(let i = 0; i < element.questions.length; i++){
-                                if(element.isCorrectAnswer){ 
-                                    const cor = element.questions[i].color
-                                    document.querySelector(`.pergunta${i+1} .titulo`).style.background = cor;
-                                    let perguntaOpcoes = element.questions[i].answers;
-                                    let opcoes = document.querySelector(`.pergunta${i+1} .opcoes`);
-                                    // console.log(element.image);
-                                    perguntaOpcoes.forEach(element => {
-                                        opcoes.innerHTML += `
-                                        <figure class="certo" onclick="selecionaResposta(this, 'pergunta${i+1}', ${element.isCorrectAnswer})">
+                                <div class="opcoes"></div>
+                            </div>    
+                        </div>
+                    </div>
+                    `
+        }
+        for (let i = 0; i < element.questions.length; i++) {
+            const cor = element.questions[i].color
+            document.querySelector(`.pergunta${i + 1} .titulo`).style.background = cor;
+            let perguntaOpcoes = element.questions[i].answers;
+            // console.log(perguntaOpcoes);
+            let opcoes = document.querySelector(`.pergunta${i + 1} .opcoes`);
+            // console.log("pergunta",i);
+            // console.log(element);
+            perguntaOpcoes.forEach(element => {
+                    console.log(element, 'opcao');
+                opcoes.innerHTML += `
+                                    <figure onclick="selecionaResposta(this, 'pergunta${i + 1}', ${element.isCorrectAnswer})">
                                         <img src=${element.image} />
-                                        <p>${element.text}</p>
-                                        </figcation>  
-                                        
-                                        `
-                                    })
-                                }else{
-                                    const cor = element.questions[i].color
-                                    document.querySelector(`.pergunta${i+1} .titulo`).style.background = cor;
-                                    let perguntaOpcoes = element.questions[i].answers;
-                                    let opcoes = document.querySelector(`.pergunta${i+1} .opcoes`);
-                                    // console.log(element.image);
-                                    perguntaOpcoes.forEach(element => {
-                                        opcoes.innerHTML += `
-                                        <figure class="errado" onclick="selecionaResposta(this, 'pergunta${i+1}', ${element.isCorrectAnswer})">
-                                        <img src=${element.image} />
-                                        <p>${element.text}</p>
-                                        </figcation>  
-                                        
-                                        `
-                                    })
-                                }
-                            }
-                            
-                            // <img src=${element.questions[i].answers[i].image}/>
-                console.log(element) // vai criar a tela 2 
-            }
-        })
+                                        <p class="certo">${element.text}</p>
+                                    </figcation>
+                                    `
 
-    })
+            });
+        }
+    });
 }
 
 
-function selecionaResposta(elemento, numPergunta, resposta){
+function selecionaResposta(elemento, numPergunta, resposta) {
     const elementos = [...document.querySelectorAll(`.${numPergunta} .opcoes figure`)];
-    const certo = document.querySelector(`.${numPergunta} .opcoes .certo`);
     elementos.forEach(elmts => {
         elmts.classList.add("nao-selecionado");
     });
     let guardaElemento = elemento.children;
-    // let guardaCerto = certo.children;
     console.log(elemento.children);
     elemento.classList.remove("nao-selecionado");
-    if(resposta === true){
+    if (resposta === true) {
         guardaElemento[1].classList.add("correto");
-        elementos.forEach(elmts =>{
-            if(elmts !== elemento){
+        elementos.forEach(elmts => {
+            if (elmts !== elemento) {
                 elmts.classList.add("incorreto");
             }
         })
-    }else{
-        // elemento.classList.add("incorreto");
+    } else {
+        elemento.classList.add("incorreto");
         elementos.forEach(elmts => {
             elmts.classList.add("incorreto");
-        });  
-        // certo.classList.remove("incorreto");
-        // guardaCerto[1].classList.add("correto");
+
+        })
     }
 }
 
@@ -238,7 +212,7 @@ function validaInformacoesPerguntas() {
     let cont = 0;
     //laço para validar o formato URL. Nesse caso, usei uma estratégia contrária, caso o valor retornado de algum elemento do array for -1
     // Mudo a flag para false e forço a saída do laço
-    
+
     for (let i = 0; i < urlCorreta.length; i++) {
 
         if (((urlCorreta[i].value.indexOf("http://") === -1) && (urlCorreta[i].value.indexOf("https://") === -1))) {
@@ -248,20 +222,20 @@ function validaInformacoesPerguntas() {
     }
     //Aqui tentei usar o forEach para verificar se os campos das respostas incorretas não estavam nulos. Caso algum campo estivesse, 
     //Limparia os campos e emitira e alert, ainda não foi feito o alert
-    respostaIncorreta.forEach((element,indice) => {
+    respostaIncorreta.forEach((element, indice) => {
 
         if (element.value === "") {
             cont++;
         }
 
-        if((indice+1) % 3 === 0 && cont > 2){
+        if ((indice + 1) % 3 === 0 && cont > 2) {
             alert("Por favor preencha os dados corretamente!");
             limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
             console.log(cont)
             cont = 0
         }
 
-        });
+    });
 
     //Laço que verifica se a pergunta tem menos de 20 caracteres, se a resposta correta está vazia e se a url não tem formato de url.
     //Caso as validaçoes sejam verdadeiras, os campos dos inputs são limpados, é emitido um alert e forçado um break no laço
@@ -272,7 +246,7 @@ function validaInformacoesPerguntas() {
             limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color);
             alert("Por favor preencha os dados corretamente!");
             break;
-        }else{
+        } else {
             limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
             criarNiveis()
             console.log("deu certo")
@@ -282,7 +256,7 @@ function validaInformacoesPerguntas() {
 
 }
 
-function limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color){
+function limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color) {
 
     pergunta.forEach(element => {
         element.value = '';
@@ -303,13 +277,13 @@ function limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, 
 }
 
 
-function verificaColor(elemento){
+function verificaColor(elemento) {
     elemento.forEach(element => {
-        if(element.value.indexOf("#") !== -1) {
-            if (element.value.length === 7){
-                for(let i = 0; i < 7;i++){
-                    for(let j = 0; j < corHex; j++){
-                        if(element.value.indexOf(corHex[j]) === -1){
+        if (element.value.indexOf("#") !== -1) {
+            if (element.value.length === 7) {
+                for (let i = 0; i < 7; i++) {
+                    for (let j = 0; j < corHex; j++) {
+                        if (element.value.indexOf(corHex[j]) === -1) {
                             return false;
                         }
                     }
@@ -320,6 +294,6 @@ function verificaColor(elemento){
     return true;
 }
 
-function criarNiveis(){
-    
+function criarNiveis() {
+
 }
