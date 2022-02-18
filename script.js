@@ -199,17 +199,37 @@ function criarPerguntas() {
     pergunta.innerHTML += `<button class="p-perguntas" onclick="validaInformacoesPerguntas()"><p> Prosseguir pra criar níveis </p></button>`;
 }
 
+function verificarRepostasIncorretas(respostaIncorreta){
 
+    let controlador = 0
+    let cont = 0;
+
+    respostaIncorreta.forEach((element,indice) => {
+
+        if (element.value === "") cont++;
+
+        if((indice+1) % 3 === 0 ){
+            if(cont > 2){
+                controlador++
+            }
+            cont = 0
+        }
+        
+    });
+        
+    return (controlador !== 0) ? false : true
+
+}
 //Funcao que valida as informacoes digitadas na tela 3.1, funcao incompleta, ainda não está funcionando
 function validaInformacoesPerguntas() {
-    const controlador = true
+    let controlador = 0
     const pergunta = [...document.querySelectorAll(".questao")]; //Aqui eu tento converter a lista retornada pelo querySelectorAll em um array.
     const color = document.querySelectorAll(".color");
     const respostaCorreta = [...document.querySelectorAll(".resposta-correta")];
     const respostaIncorreta = [...document.querySelectorAll(".resposta-incorreta")];
     const urlCorreta = [...document.querySelectorAll(".url-correta")];
     let flag = true; // Mesma estrategia da flag anterior
-    let cont = 0;
+    
     //laço para validar o formato URL. Nesse caso, usei uma estratégia contrária, caso o valor retornado de algum elemento do array for -1
     // Mudo a flag para false e forço a saída do laço
 
@@ -241,17 +261,24 @@ function validaInformacoesPerguntas() {
     //Caso as validaçoes sejam verdadeiras, os campos dos inputs são limpados, é emitido um alert e forçado um break no laço
     for (let i = 0; i < pergunta.length; i++) {
 
-        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || flag === false || !verificaColor(color)) {
-
-            limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color);
-            alert("Por favor preencha os dados corretamente!");
+        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || flag === false || !verificaColor(color) || !verificarRepostasIncorretas(respostaIncorreta) ) {
+            controlador++
             break;
         } else {
             limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
             criarNiveis()
             console.log("deu certo")
-
         }
+    }
+
+    if(controlador !== 0){
+        alert("Por favor preencha os dados corretamente!");
+        limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
+
+    } else {
+
+        criarNiveis()
+
     }
 
 }
@@ -294,6 +321,17 @@ function verificaColor(elemento) {
     return true;
 }
 
+
 function criarNiveis() {
+
+
+function criarNiveis(){
+    const pergunta = document.querySelector(".tela3-perguntas"); //tela 3.1 onde cria as perguntas
+    const niveis = document.querySelector(".tela3-niveis"); //tela 3.1 onde cria as perguntas
+    const remocao = document.querySelector(".tela3"); //Tela 3 inicial
+    remocao.classList.add("escondido"); //Some com a tela 3 inicial
+    pergunta.classList.add("escondido"); //Some com a tela 3 inicial
+    niveis.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
+    
 
 }
