@@ -72,14 +72,23 @@ function exibirQuizz(quizz) {
             let opcoes = document.querySelector(`.pergunta${i + 1} .opcoes`);
             // console.log("pergunta",i);
             // console.log(element);
+            perguntaOpcoes.sort(comparador);
             perguntaOpcoes.forEach(element => {
-                    console.log(element, 'opcao');
-                opcoes.innerHTML += `
-                                    <figure onclick="selecionaResposta(this, 'pergunta${i + 1}', ${element.isCorrectAnswer})">
-                                        <img src=${element.image} />
-                                        <p class="certo">${element.text}</p>
-                                    </figcation>
-                                    `
+                if (element.isCorrectAnswer === true) {
+                    opcoes.innerHTML += `
+                                        <figure onclick="selecionaResposta(this, 'pergunta${i + 1}', ${element.isCorrectAnswer},${i})">
+                                            <img src=${element.image} />
+                                            <p class="certo${i}">${element.text}</p>
+                                        </figcation>
+                                        `
+                } else {
+                    opcoes.innerHTML += `
+                                        <figure onclick="selecionaResposta(this, 'pergunta${i + 1}', 'errado${i}',${i})">
+                                            <img src=${element.image} />
+                                            <p class="errado${i}">${element.text}</p>
+                                        </figcation>
+                                        `
+                }
 
             });
         }
@@ -87,27 +96,38 @@ function exibirQuizz(quizz) {
 }
 
 
-function selecionaResposta(elemento, numPergunta, resposta) {
+function selecionaResposta(elemento, numPergunta, resposta, indice) {
     const elementos = [...document.querySelectorAll(`.${numPergunta} .opcoes figure`)];
-    elementos.forEach(elmts => {
-        elmts.classList.add("nao-selecionado");
-    });
-    let guardaElemento = elemento.children;
-    console.log(elemento.children);
-    elemento.classList.remove("nao-selecionado");
-    if (resposta === true) {
-        guardaElemento[1].classList.add("correto");
+    //console.log(elementos);
+    if(!elemento.classList.contains("nao-selecionado")){
         elementos.forEach(elmts => {
-            if (elmts !== elemento) {
+            elmts.classList.add("nao-selecionado");
+        });
+        // let guardaElemento = elemento.children;
+        // console.log(elemento.children);
+        elemento.classList.remove("nao-selecionado");
+    
+    
+        if (resposta === true) {
+            elemento.classList.add("correto");
+            const response = [...document.querySelectorAll(`.errado${indice}`)];
+            response.forEach(elmts => {
+                console.log(elmts);
                 elmts.classList.add("incorreto");
-            }
-        })
-    } else {
-        elemento.classList.add("incorreto");
-        elementos.forEach(elmts => {
-            elmts.classList.add("incorreto");
-
-        })
+            })
+        } else {
+            const certo = document.querySelector(`.certo${indice}`);
+            const response = [...document.querySelectorAll(`.${resposta}`)];
+            // response.classList.add("incorreto");
+            response.forEach(elmts => {
+                console.log(elmts);
+                elmts.classList.add("incorreto");
+            })
+            certo.classList.add("correto");
+        }
+        setTimeout(() => {
+            elemento.scrollIntoView();
+        }, 2000);
     }
 }
 
@@ -199,27 +219,29 @@ function criarPerguntas() {
     pergunta.innerHTML += `<button class="p-perguntas" onclick="validaInformacoesPerguntas()"><p> Prosseguir pra criar níveis </p></button>`;
 }
 
-function verificarRepostasIncorretas(respostaIncorreta){
+function verificarRepostasIncorretas(respostaIncorreta) {
 
     let controlador = 0
     let cont = 0;
 
-    respostaIncorreta.forEach((element,indice) => {
+    respostaIncorreta.forEach((element, indice) => {
 
         if (element.value === "") cont++;
 
-        if((indice+1) % 3 === 0 ){
-            if(cont > 2){
+        if ((indice + 1) % 3 === 0) {
+            if (cont > 2) {
                 controlador++
             }
             cont = 0
         }
-        
+
     });
-        
+
     return (controlador !== 0) ? false : true
 
 }
+
+
 //Funcao que valida as informacoes digitadas na tela 3.1, funcao incompleta, ainda não está funcionando
 function validaInformacoesPerguntas() {
     let controlador = 0
@@ -229,7 +251,7 @@ function validaInformacoesPerguntas() {
     const respostaIncorreta = [...document.querySelectorAll(".resposta-incorreta")];
     const urlCorreta = [...document.querySelectorAll(".url-correta")];
     let flag = true; // Mesma estrategia da flag anterior
-    
+
     //laço para validar o formato URL. Nesse caso, usei uma estratégia contrária, caso o valor retornado de algum elemento do array for -1
     // Mudo a flag para false e forço a saída do laço
 
@@ -261,7 +283,7 @@ function validaInformacoesPerguntas() {
     //Caso as validaçoes sejam verdadeiras, os campos dos inputs são limpados, é emitido um alert e forçado um break no laço
     for (let i = 0; i < pergunta.length; i++) {
 
-        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || flag === false || !verificaColor(color) || !verificarRepostasIncorretas(respostaIncorreta) ) {
+        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || flag === false || !verificaColor(color) || !verificarRepostasIncorretas(respostaIncorreta)) {
             controlador++
             break;
         } else {
@@ -271,7 +293,7 @@ function validaInformacoesPerguntas() {
         }
     }
 
-    if(controlador !== 0){
+    if (controlador !== 0) {
         alert("Por favor preencha os dados corretamente!");
         limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
 
@@ -323,15 +345,19 @@ function verificaColor(elemento) {
 
 
 function criarNiveis() {
+}
 
 
-function criarNiveis(){
+function criarNiveis() {
     const pergunta = document.querySelector(".tela3-perguntas"); //tela 3.1 onde cria as perguntas
     const niveis = document.querySelector(".tela3-niveis"); //tela 3.1 onde cria as perguntas
     const remocao = document.querySelector(".tela3"); //Tela 3 inicial
     remocao.classList.add("escondido"); //Some com a tela 3 inicial
     pergunta.classList.add("escondido"); //Some com a tela 3 inicial
     niveis.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
-    
+}
 
+
+function comparador() {
+    return Math.random() - 0.5;
 }
