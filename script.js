@@ -14,21 +14,24 @@ function listarTodosQuizzes() {
 
     promise.then((resposta) => {
         const todosQuizzes = document.querySelector('.todosQuizzes')
-        todosQuizzes.innerHTML = '<h2>Todos os Quizzes</h2>'
+        if( todosQuizzes !== null){
 
-        resposta.data.forEach(element => {
-            todosQuizzes.innerHTML += `
+            todosQuizzes.innerHTML = '<h2>Todos os Quizzes</h2>'
 
-                <div class="quizz " onclick ='exibirQuizz(${element.id})' >
-                    <figure>
-                        <div class="degrade"></div>
-                        <img src=${element.image} />
-                        <p>${element.title}</p>
-                    </figcation>    
-                </div>
-            
-            `
-        });
+            resposta.data.forEach(element => {
+                todosQuizzes.innerHTML += `
+
+                    <div class="quizz " onclick ='exibirQuizz(${element.id})' >
+                        <figure>
+                            <div class="degrade"></div>
+                            <img src=${element.image} />
+                            <p>${element.title}</p>
+                        </figcation>    
+                    </div>
+                
+                `
+            });
+        }
     })
 }
 
@@ -172,26 +175,13 @@ function validaInformacoesBasicas() {
     if ((titulo.length >= 20 && titulo.length <= 65) && (niveis >= 2) && (perguntas >= 3) && verificarUrl) {
         qtdNiveis = niveis;
         qtdPerguntas = perguntas;
-        let limpaTitulo = document.querySelector(".titulo1");
-        limpaTitulo.value = "";
-        let limpaURL = document.querySelector(".url-correta");
-        limpaURL.value = "";
-        let limpaPerguntas = document.querySelector(".perguntas1");
-        limpaPerguntas.value = "";
-        let limpaNiveis = document.querySelector(".niveis1");
-        limpaNiveis.value = "";
-
+        limparCampos('tela3')
         criarPerguntas();
+
     } else { //Caso seja falso, é exibido um alert e os inputs são limpos e a página recarregada.
+
         alert("Por favor, preencha os dados corretamente!");
-        let limpaTitulo = document.querySelector(".titulo1");
-        limpaTitulo.value = "";
-        let limpaURL = document.querySelector(".url-correta");
-        limpaURL.value = "";
-        let limpaPerguntas = document.querySelector(".perguntas1");
-        limpaPerguntas.value = "";
-        let limpaNiveis = document.querySelector(".niveis1");
-        limpaNiveis.value = "";
+        limparCampos('tela3')
         window.location.reload;
     }
 }
@@ -276,7 +266,7 @@ function validaInformacoesPerguntas() {
 
         if ((indice + 1) % 3 === 0 && cont > 2) {
             alert("Por favor preencha os dados corretamente!");
-            limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
+            limparCampos('tela3-perguntas')
             console.log(cont)
             cont = 0
         }
@@ -291,14 +281,14 @@ function validaInformacoesPerguntas() {
             controlador++
             break;
         } else {
-            limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
+            limparCampos('tela3-perguntas')
             criarNiveis()
         }
     }
 
     if (controlador !== 0) {
         alert("Por favor preencha os dados corretamente!");
-        limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
+        limparCampos('tela3-perguntas')
 
     } else {
 
@@ -308,23 +298,69 @@ function validaInformacoesPerguntas() {
 
 }
 
-function limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color) {
+function limparCampos(tela) {
+    if(tela === 'tela3'){
 
-    pergunta.forEach(element => {
-        element.value = '';
-    });
-    respostaCorreta.forEach(element => {
-        element.value = '';
-    });
-    respostaIncorreta.forEach(element => {
-        element.value = '';
-    });
-    urlCorreta.forEach(element => {
-        element.value = '';
-    });
-    color.forEach(element => {
-        element.value = '';
-    });
+        let limpaTitulo = document.querySelector(" .tela3 .titulo1");
+        limpaTitulo.value = "";
+        let limpaURL = document.querySelector(".tela3 .url-correta");
+        limpaURL.value = "";
+        let limpaPerguntas = document.querySelector(".tela3 .perguntas1");
+        limpaPerguntas.value = "";
+        let limpaNiveis = document.querySelector(".tela3 .niveis1");
+        limpaNiveis.value = "";
+
+    }else{
+        if(tela === 'tela3-perguntas'){
+
+            const pergunta = [...document.querySelectorAll(".tela3-perguntas .questao")]; 
+            const color = document.querySelectorAll(".tela3-perguntas .color");
+            const respostaCorreta = [...document.querySelectorAll(".tela3-perguntas .resposta-correta")];
+            const respostaIncorreta = [...document.querySelectorAll(".tela3-perguntas .resposta-incorreta")];
+            const urlCorreta = [...document.querySelectorAll(".tela3-perguntas .url-correta")];
+
+            pergunta.forEach(element => {
+                element.value = '';
+            });
+            respostaCorreta.forEach(element => {
+                element.value = '';
+            });
+            respostaIncorreta.forEach(element => {
+                element.value = '';
+            });
+            urlCorreta.forEach(element => {
+                element.value = '';
+            });
+            color.forEach(element => {
+                element.value = '';
+            });
+
+        }else{
+
+            const nivel = [...document.querySelectorAll(".nivel")];
+            const porcentagem = [...document.querySelectorAll(".porcentagem")];
+            const urlCorreta = [...document.querySelectorAll(".url-correta")];
+            const descricao = [...document.querySelectorAll(".descricao")];
+
+            nivel.forEach(element => {
+                element.value = '';
+            });
+
+            porcentagem.forEach(element => {
+                element.value = '';
+            });
+
+            urlCorreta.forEach(element => {
+                element.value = '';
+            });
+
+            descricao.forEach(element => {
+                element.value = '';
+            });
+
+        }
+    }
+
 
 }
 
@@ -441,7 +477,7 @@ function validaInformacoesNiveis(){
 
     if(controlador !== 0){
         alert("Por favor preencha os dados corretamente!");
-        // limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
+        limparCampos('tela3-niveis')
 
     } else {
         criarSucessoQuizz()
