@@ -1,5 +1,6 @@
 *{
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 
@@ -232,6 +233,37 @@ figure .degradeBanner{
     font-size: 13px;
     font-weight: 700;
     /* line-height: 15.23px; */
+}
+
+.caixa-resposta{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 340px;
+    height: 54px;
+    background-color: #EC362D;
+}
+
+.caixa-resposta h3{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    color: #FFFFFF;
+    font-size: 19px;
+    text-align: center;
+}
+
+.imagem-resposta h4{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    color: #484848;
+    font-size: 17px;
+    line-height: 19.25px;
+    text-align: center;
+}
+
+.imagem-resposta img{
+    width: 340px;
+    height: 255px;
 }
 
 .nao-selecionado{

@@ -2,7 +2,11 @@ let qtdNiveis = null;
 let qtdPerguntas = null;
 let guardaCor = null;
 
-const corHex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+let qtdAcertos = null;
+let qtdRespondidos = null;
+let quiz = null;
+
+const corHex = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
 
 function listarTodosQuizzes() {
 
@@ -29,111 +33,125 @@ function listarTodosQuizzes() {
 }
 
 function exibirQuizz(quizz) {
-    const promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes')
-
+    const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizz}`);
+    quiz = quizz;
     promise.then((resposta) => {
+        let element = resposta.data;
         // console.log(resposta.data);
-        resposta.data.forEach(element => {
-            if (element.id === quizz) {
-                document.querySelector('main').classList.add('mainTela2')
-                document.querySelector('.criarQuizz').classList.add('escondido')
-                document.querySelector('.todosQuizzes').classList.add('escondido')
-                // console.log(element.questions);
-                const tela2 = document.querySelector('.tela2')
-                tela2.innerHTML += `
-
+        // resposta.data.forEach(element => {
+        // if (element.id === quizz) {
+        document.querySelector('main').classList.add('mainTela2')
+        document.querySelector('.criarQuizz').classList.add('escondido')
+        document.querySelector('.todosQuizzes').classList.add('escondido')
+        // console.log(element.questions);
+        const tela2 = document.querySelector('.tela2')
+        tela2.innerHTML += `
                 <div class="banner" >
                     <figure>
                         <div class="degradeBanner"></div>
                         <img src=${element.image} />
                         <p>${element.title}</p>
                     </figcation>    
-                </div>` 
-                for(let i = 0; i < element.questions.length; i++){
-                    tela2.innerHTML += `
+                </div>
+                `
+        for (let i = 0; i < element.questions.length; i++) {
+            tela2.innerHTML += `
                     <div class='perguntas'>
-                        <div class=" pergunta pergunta${i+1}" >
+                        <div class=" pergunta pergunta${i + 1}" >
                             <div class= "conteudo">
                                 <div class="titulo">
-                                <h3>${element.questions[i].title}</h3>
+                                    <h3>${element.questions[i].title}</h3>
                                 </div>
-                                <div class="opcoes">
-                                
-                                </div>
-                                </div>    
-                                </div>
-                                </div>
-                                
-                                `
-                            }
-                        
-                            for(let i = 0; i < element.questions.length; i++){
-                                if(element.isCorrectAnswer){ 
-                                    const cor = element.questions[i].color
-                                    document.querySelector(`.pergunta${i+1} .titulo`).style.background = cor;
-                                    let perguntaOpcoes = element.questions[i].answers;
-                                    let opcoes = document.querySelector(`.pergunta${i+1} .opcoes`);
-                                    // console.log(element.image);
-                                    perguntaOpcoes.forEach(element => {
-                                        opcoes.innerHTML += `
-                                        <figure class="certo" onclick="selecionaResposta(this, 'pergunta${i+1}', ${element.isCorrectAnswer})">
-                                        <img src=${element.image} />
-                                        <p>${element.text}</p>
-                                        </figcation>  
-                                        
-                                        `
-                                    })
-                                }else{
-                                    const cor = element.questions[i].color
-                                    document.querySelector(`.pergunta${i+1} .titulo`).style.background = cor;
-                                    let perguntaOpcoes = element.questions[i].answers;
-                                    let opcoes = document.querySelector(`.pergunta${i+1} .opcoes`);
-                                    // console.log(element.image);
-                                    perguntaOpcoes.forEach(element => {
-                                        opcoes.innerHTML += `
-                                        <figure class="errado" onclick="selecionaResposta(this, 'pergunta${i+1}', ${element.isCorrectAnswer})">
-                                        <img src=${element.image} />
-                                        <p>${element.text}</p>
-                                        </figcation>  
-                                        
-                                        `
-                                    })
-                                }
-                            }
-                            
-                            // <img src=${element.questions[i].answers[i].image}/>
-                console.log(element) // vai criar a tela 2 
-            }
-        })
+                                <div class="opcoes"></div>
+                            </div>    
+                        </div>
+                    </div>
+                    `
+        }
+        for (let i = 0; i < element.questions.length; i++) {
+            const cor = element.questions[i].color
+            document.querySelector(`.pergunta${i + 1} .titulo`).style.background = cor;
+            let perguntaOpcoes = element.questions[i].answers;
+            // console.log(perguntaOpcoes);
+            let opcoes = document.querySelector(`.pergunta${i + 1} .opcoes`);
+            // console.log("pergunta",i);
+            // console.log(element);
+            perguntaOpcoes.sort(comparador);
+            perguntaOpcoes.forEach(element => {
+                if (element.isCorrectAnswer === true) {
+                    opcoes.innerHTML += `
+                                        <figure onclick="selecionaResposta(this, 'pergunta${i + 1}', ${element.isCorrectAnswer},${i})">
+                                            <img src=${element.image} />
+                                            <p class="certo${i}">${element.text}</p>
+                                        </figcation>
+                                        `;
+                } else {
+                    opcoes.innerHTML += `
+                                        <figure onclick="selecionaResposta(this, 'pergunta${i + 1}', 'errado${i}',${i})">
+                                            <img src=${element.image} />
+                                            <p class="errado${i}">${element.text}</p>
+                                        </figcation>
+                                        `;
+                }
+            });
+        }
 
-    })
+    });
 }
 
 
-function selecionaResposta(elemento, numPergunta, resposta){
+function selecionaResposta(elemento, numPergunta, resposta, indice) {
     const elementos = [...document.querySelectorAll(`.${numPergunta} .opcoes figure`)];
-    const certo = document.querySelector(`.${numPergunta} .opcoes .certo`);
-    elementos.forEach(elmts => {
-        elmts.classList.add("nao-selecionado");
-    });
-    let guardaElemento = elemento.children;
-    // let guardaCerto = certo.children;
-    console.log(elemento.children);
-    elemento.classList.remove("nao-selecionado");
-    if(resposta === true){
-        guardaElemento[1].classList.add("correto");
-        elementos.forEach(elmts =>{
-            if(elmts !== elemento){
-                elmts.classList.add("incorreto");
-            }
-        })
-    }else{
-        // elemento.classList.add("incorreto");
+    //console.log(elementos);
+    if(!elemento.classList.contains("nao-selecionado")){
         elementos.forEach(elmts => {
-            elmts.classList.add("incorreto");
-        });  
-        // certo.classList.remove("incorreto");
-        // guardaCerto[1].classList.add("correto");
+            elmts.classList.add("nao-selecionado");
+        });
+        // let guardaElemento = elemento.children;
+        // console.log(elemento.children);
+        elemento.classList.remove("nao-selecionado");
+    
+    
+        if (resposta === true) {
+            elemento.classList.add("correto");
+            qtdAcertos++;
+            qtdRespondidos++;
+            const response = [...document.querySelectorAll(`.errado${indice}`)];
+            response.forEach(elmts => {
+                elmts.classList.add("incorreto");
+            })
+        } else {
+            qtdRespondidos++;
+            const certo = document.querySelector(`.certo${indice}`);
+            const response = [...document.querySelectorAll(`.${resposta}`)];
+            // response.classList.add("incorreto");
+            response.forEach(elmts => {
+                console.log(elmts);
+                elmts.classList.add("incorreto");
+            })
+            certo.classList.add("correto");
+        }
+        setTimeout(() => {
+            let promiseLevels = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quiz}`);
+            promiseLevels.then((resposta)=>{
+                const levels = resposta.data.levels;
+                const tela2 = document.querySelector('.tela2')
+                if(qtdRespondidos === levels.length){
+                    for(let i = 0; i < levels.length; i++){
+                        tela2.innerHTML += `
+                            <div class="caixa-resposta">
+                                <h3>${levels[i].minValue}%:${levels[i].title} </h3>
+                            </div>
+                            <div class="imagem-resposta">
+                                <img src=${levels[i].image}/>
+                                <h4>${levels[i].text}</h4>
+                            </div>
+                        `
+                    }
+                }
+            })
+            elemento.scrollIntoView();
+        }, 2000);
     }
 }
 
@@ -226,27 +244,29 @@ function criarPerguntas() {
     pergunta.innerHTML += `<button class="p-perguntas" onclick="validaInformacoesPerguntas()"><p> Prosseguir pra criar níveis </p></button>`;
 }
 
-function verificarRepostasIncorretas(respostaIncorreta){
+function verificarRepostasIncorretas(respostaIncorreta) {
 
     let controlador = 0
     let cont = 0;
 
-    respostaIncorreta.forEach((element,indice) => {
+    respostaIncorreta.forEach((element, indice) => {
 
         if (element.value === "") cont++;
 
-        if((indice+1) % 3 === 0 ){
-            if(cont > 2){
+        if ((indice + 1) % 3 === 0) {
+            if (cont > 2) {
                 controlador++
             }
             cont = 0
         }
-        
+
     });
-        
+
     return (controlador !== 0) ? false : true
 
 }
+
+
 //Funcao que valida as informacoes digitadas na tela 3.1, funcao incompleta, ainda não está funcionando
 function validaInformacoesPerguntas() {
     let controlador = 0
@@ -256,10 +276,10 @@ function validaInformacoesPerguntas() {
     const respostaIncorreta = [...document.querySelectorAll(".resposta-incorreta")];
     const urlCorreta = [...document.querySelectorAll(".url-correta")];
     let flag = true; // Mesma estrategia da flag anterior
-    
+
     //laço para validar o formato URL. Nesse caso, usei uma estratégia contrária, caso o valor retornado de algum elemento do array for -1
     // Mudo a flag para false e forço a saída do laço
-    
+
     for (let i = 0; i < urlCorreta.length; i++) {
 
         if (((urlCorreta[i].value.indexOf("http://") === -1) && (urlCorreta[i].value.indexOf("https://") === -1))) {
@@ -267,20 +287,38 @@ function validaInformacoesPerguntas() {
             break;
         }
     }
-    
+    //Aqui tentei usar o forEach para verificar se os campos das respostas incorretas não estavam nulos. Caso algum campo estivesse, 
+    //Limparia os campos e emitira e alert, ainda não foi feito o alert
+    respostaIncorreta.forEach((element, indice) => {
+
+        if (element.value === "") {
+            cont++;
+        }
+
+        if ((indice + 1) % 3 === 0 && cont > 2) {
+            alert("Por favor preencha os dados corretamente!");
+            limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
+            console.log(cont)
+            cont = 0
+        }
+
+    });
 
     //Laço que verifica se a pergunta tem menos de 20 caracteres, se a resposta correta está vazia e se a url não tem formato de url.
     //Caso as validaçoes sejam verdadeiras, os campos dos inputs são limpados, é emitido um alert e forçado um break no laço
     for (let i = 0; i < pergunta.length; i++) {
 
-        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || flag === false || !verificaColor(color) || !verificarRepostasIncorretas(respostaIncorreta) ) {
+        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || flag === false || !verificaColor(color) || !verificarRepostasIncorretas(respostaIncorreta)) {
             controlador++
-            
             break;
+        } else {
+            limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
+            criarNiveis()
+            console.log("deu certo")
         }
     }
 
-    if(controlador !== 0){
+    if (controlador !== 0) {
         alert("Por favor preencha os dados corretamente!");
         limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
 
@@ -292,7 +330,7 @@ function validaInformacoesPerguntas() {
 
 }
 
-function limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color){
+function limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color) {
 
     pergunta.forEach(element => {
         element.value = '';
@@ -313,13 +351,13 @@ function limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, 
 }
 
 
-function verificaColor(elemento){
+function verificaColor(elemento) {
     elemento.forEach(element => {
-        if(element.value.indexOf("#") !== -1) {
-            if (element.value.length === 7){
-                for(let i = 0; i < 7;i++){
-                    for(let j = 0; j < corHex; j++){
-                        if(element.value.indexOf(corHex[j]) === -1){
+        if (element.value.indexOf("#") !== -1) {
+            if (element.value.length === 7) {
+                for (let i = 0; i < 7; i++) {
+                    for (let j = 0; j < corHex; j++) {
+                        if (element.value.indexOf(corHex[j]) === -1) {
                             return false;
                         }
                     }
@@ -374,8 +412,8 @@ function verificarPorcentagem(){
     return (nivelZero !== 0 && controlador !== 0) ? true : false
 }
 
+function criarNiveis() {
 
-function criarNiveis(){
     const pergunta = document.querySelector(".tela3-perguntas"); //tela 3.1 onde cria as perguntas
     const niveis = document.querySelector(".tela3-niveis"); //tela 3.1 onde cria as perguntas
     const remocao = document.querySelector(".tela3"); //Tela 3 inicial
@@ -439,4 +477,8 @@ function criarSucessoQuizz(){
     niveis.classList.add("escondido"); //Some com a tela 3 inicial
     sucessoQuizz.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
 
+}
+
+function comparador() {
+    return Math.random() - 0.5;
 }
