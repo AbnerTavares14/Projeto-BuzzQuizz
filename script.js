@@ -164,26 +164,17 @@ function criarQuiz() {
 function validaInformacoesBasicas() {
     //Recupera o valor escrito nas caixas de texto
     const titulo = document.querySelector(".titulo1").value;
-    const url = document.querySelector(".url1").value;
     const perguntas = document.querySelector(".perguntas1").value;
     const niveis = document.querySelector(".niveis1").value;
-    let flag = false; // Flag usada para validar se a url escrita pelo usuário está no formato de url.
-    //Caso as substrings nao existam na string que url está guardando, retornará -1.
-    //Ou seja, se for diferente de -1, é porque essas substrings estão presentes na string url.
-    if (((url.indexOf("http://") !== -1) || (url.indexOf("https://") !== -1))) {
-        flag = true;
-    }
 
-    //Nesse if está sendo verificado se o titulo digitado tem no mínimo 20 caracteres e no máximo 65 caracteres.
-    //Se a quantidade de níveis é no mínimo 2 e se a quantidade de perguntas é pelo menos 3. Caso tudo seja verdadeiro
-    //Duas variaveis globais guardarão a quantidade de níveis e perguntas, os inputs serão limpos e a funcao
-    //criarPerguntas é chamada
-    if ((titulo.length >= 20 && titulo.length <= 65) && (niveis >= 2) && (perguntas >= 3) && flag === true) {
+    const verificarUrl = verificarURL('tela3')
+    
+    if ((titulo.length >= 20 && titulo.length <= 65) && (niveis >= 2) && (perguntas >= 3) && verificarUrl) {
         qtdNiveis = niveis;
         qtdPerguntas = perguntas;
         let limpaTitulo = document.querySelector(".titulo1");
         limpaTitulo.value = "";
-        let limpaURL = document.querySelector(".url1");
+        let limpaURL = document.querySelector(".url-correta");
         limpaURL.value = "";
         let limpaPerguntas = document.querySelector(".perguntas1");
         limpaPerguntas.value = "";
@@ -195,7 +186,7 @@ function validaInformacoesBasicas() {
         alert("Por favor, preencha os dados corretamente!");
         let limpaTitulo = document.querySelector(".titulo1");
         limpaTitulo.value = "";
-        let limpaURL = document.querySelector(".url1");
+        let limpaURL = document.querySelector(".url-correta");
         limpaURL.value = "";
         let limpaPerguntas = document.querySelector(".perguntas1");
         limpaPerguntas.value = "";
@@ -211,7 +202,6 @@ function apareceCriacaoDaPergunta(elemento, pergunta) {
     acontece.classList.remove("escondido");
     elemento.classList.add("escondido");
 }
-
 
 //Funcao responsavel por criar as perguntas dinamicamente de acordo com a quantidade de perguntas informadas pelo usuario
 function criarPerguntas() {
@@ -275,20 +265,9 @@ function validaInformacoesPerguntas() {
     const respostaCorreta = [...document.querySelectorAll(".resposta-correta")];
     const respostaIncorreta = [...document.querySelectorAll(".resposta-incorreta")];
     const urlCorreta = [...document.querySelectorAll(".url-correta")];
-    let flag = true; // Mesma estrategia da flag anterior
 
-    //laço para validar o formato URL. Nesse caso, usei uma estratégia contrária, caso o valor retornado de algum elemento do array for -1
-    // Mudo a flag para false e forço a saída do laço
+    const verificarUrl = !verificarURL('tela3-perguntas')
 
-    for (let i = 0; i < urlCorreta.length; i++) {
-
-        if (((urlCorreta[i].value.indexOf("http://") === -1) && (urlCorreta[i].value.indexOf("https://") === -1))) {
-            flag = false;
-            break;
-        }
-    }
-    //Aqui tentei usar o forEach para verificar se os campos das respostas incorretas não estavam nulos. Caso algum campo estivesse, 
-    //Limparia os campos e emitira e alert, ainda não foi feito o alert
     respostaIncorreta.forEach((element, indice) => {
 
         if (element.value === "") {
@@ -308,13 +287,12 @@ function validaInformacoesPerguntas() {
     //Caso as validaçoes sejam verdadeiras, os campos dos inputs são limpados, é emitido um alert e forçado um break no laço
     for (let i = 0; i < pergunta.length; i++) {
 
-        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || flag === false || !verificaColor(color) || !verificarRepostasIncorretas(respostaIncorreta)) {
+        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || verificarUrl || !verificaColor(color) || !verificarRepostasIncorretas(respostaIncorreta)) {
             controlador++
             break;
         } else {
             limparCampos(pergunta, respostaCorreta, respostaIncorreta, urlCorreta, color)
             criarNiveis()
-            console.log("deu certo")
         }
     }
 
