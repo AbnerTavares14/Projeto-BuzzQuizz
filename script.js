@@ -197,9 +197,9 @@ function validaInformacoesBasicas() {
 }
 
 //Funcao responsavel por fazer aparecer as perguntas posteriores a primeira assim que o usuario clicar no icone.
-function apareceCriacaoDaPergunta(elemento, pergunta) {
-    const acontece = document.querySelector(`.${pergunta}`);
-    acontece.classList.remove("escondido");
+function removerEscondido(elemento,tela, item) {
+    const novoItem = document.querySelector(`.${tela} .${item}`);
+    novoItem.classList.remove("escondido");
     elemento.classList.add("escondido");
 }
 
@@ -213,7 +213,7 @@ function criarPerguntas() {
     for (let i = 0; i < qtdPerguntas - 1; i++) {
         pergunta.innerHTML += `<div class="selecione">
         <h2>Pergunta ${i + 2}</h2>
-        <ion-icon name="create-outline" onclick="apareceCriacaoDaPergunta(this, 'p${i + 2}')"></ion-icon>
+        <ion-icon name="create-outline" onclick="removerEscondido(this,'tela3-perguntas', 'p${i + 2}')"></ion-icon>
     </div>
     <div class="cria-pergunta p${i + 2} escondido">
         <input type="textarea" class="questao" placeholder="Texto da pergunta">
@@ -266,7 +266,7 @@ function validaInformacoesPerguntas() {
     const color = document.querySelectorAll(".color");
     const respostaCorreta = [...document.querySelectorAll(".resposta-correta")];
     const respostaIncorreta = [...document.querySelectorAll(".resposta-incorreta")];
-    const urlCorreta = [...document.querySelectorAll(".url-correta")];
+    const urlCorreta = [...document.querySelectorAll(".tela3-perguntas .url-correta")];
     const urlRespostaIncorretas = [...document.querySelectorAll(".url-resposta")];
     
 
@@ -294,7 +294,7 @@ function validaInformacoesPerguntas() {
         limparCampos('tela3-perguntas')
 
     } else {
-
+        
         for (let i = 0; i < pergunta.length; i++) {
             let respostas = []
             novoQuizzPeguntas.push({
@@ -312,9 +312,10 @@ function validaInformacoesPerguntas() {
             
             )
 
+
             respostaIncorreta.forEach((element, indice)=>{
                 
-                if( element.value !== "" && indice <= 2 && i === 1){
+                if( element.value !== "" && indice < 3 && i === 0){
                     respostas.push({
                         text: element.value,
                         image:urlRespostaIncorretas [indice].value,
@@ -322,7 +323,7 @@ function validaInformacoesPerguntas() {
                     })
                 }
 
-                if( element.value !== "" && indice > 2 && indice < 6 && i === 2){
+                if( element.value !== "" && indice > 2 && indice < 6 && i === 1){
                     respostas.push({
                         text: element.value,
                         image:urlRespostaIncorretas [indice].value,
@@ -330,7 +331,7 @@ function validaInformacoesPerguntas() {
                     })
                 }
 
-                if( element.value !== "" && indice > 5  && i === 3){
+                if( element.value !== "" && indice > 5  && i === 2){
                     respostas.push({
                         text: element.value,
                         image:urlRespostaIncorretas [indice].value,
@@ -481,15 +482,13 @@ function criarNiveis() {
 
     const pergunta = document.querySelector(".tela3-perguntas"); //tela 3.1 onde cria as perguntas
     const niveis = document.querySelector(".tela3-niveis"); //tela 3.1 onde cria as perguntas
-    const remocao = document.querySelector(".tela3"); //Tela 3 inicial
-    remocao.classList.add("escondido"); //Some com a tela 3 inicial
     pergunta.classList.add("escondido"); //Some com a tela 3 inicial
     niveis.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
 
     for (let i = 0; i < qtdNiveis - 1; i++) {
         niveis.innerHTML += `<div class="selecione">
         <h2>Nivel ${i + 2}</h2>
-        <ion-icon name="create-outline" onclick="apareceCriacaoDaPergunta(this, 'p${i + 2}')"></ion-icon>
+        <ion-icon name="create-outline" onclick="removerEscondido(this,'tela3-niveis', 'p${i + 2}')"></ion-icon>
     </div>
     <div class="cria-niveis p${i + 2} escondido">
 
@@ -510,7 +509,7 @@ function validaInformacoesNiveis(){
 
     const nivel = [...document.querySelectorAll(".nivel")];
     const porcentagem = [...document.querySelectorAll(".porcentagem")];
-    const urlCorreta = [...document.querySelectorAll(".url-correta")];
+    const urlCorreta = [...document.querySelectorAll(".tela3-niveis .url-correta")];
     const descricao = [...document.querySelectorAll(".descricao")];
 
     for (let i = 0; i < nivel.length; i++) {
@@ -523,14 +522,6 @@ function validaInformacoesNiveis(){
         if (verificarTituloNivel || verificarDescricao|| verificarIntervaloPorcetagem || verificarUrl) {
             controlador++
             
-        }else{
-            novoQuizzNiveis.push({
-                title: nivel[i].value,
-                image: urlCorreta[i].value,
-                text: descricao[i].value,
-                minValue: parseInt(porcentagem[i].value)
-            })
-
         }
     }
 
@@ -539,6 +530,15 @@ function validaInformacoesNiveis(){
         limparCampos('tela3-niveis')
 
     } else {
+        for (let i = 0; i < nivel.length; i++) {
+            novoQuizzNiveis.push({
+                title: nivel[i].value,
+                image: urlCorreta[i].value,
+                text: descricao[i].value,
+                minValue: parseInt(porcentagem[i].value)
+            })
+        }
+
         criarSucessoQuizz()
     }
 
