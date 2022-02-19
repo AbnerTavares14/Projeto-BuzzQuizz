@@ -2,6 +2,10 @@ let qtdNiveis = null;
 let qtdPerguntas = null;
 let guardaCor = null;
 
+let qtdAcertos = null;
+let qtdRespondidos = null;
+let quiz = null;
+
 const corHex = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
 
 function listarTodosQuizzes() {
@@ -30,7 +34,7 @@ function listarTodosQuizzes() {
 
 function exibirQuizz(quizz) {
     const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizz}`);
-
+    quiz = quizz;
     promise.then((resposta) => {
         let element = resposta.data;
         // console.log(resposta.data);
@@ -80,18 +84,18 @@ function exibirQuizz(quizz) {
                                             <img src=${element.image} />
                                             <p class="certo${i}">${element.text}</p>
                                         </figcation>
-                                        `
+                                        `;
                 } else {
                     opcoes.innerHTML += `
                                         <figure onclick="selecionaResposta(this, 'pergunta${i + 1}', 'errado${i}',${i})">
                                             <img src=${element.image} />
                                             <p class="errado${i}">${element.text}</p>
                                         </figcation>
-                                        `
+                                        `;
                 }
-
             });
         }
+
     });
 }
 
@@ -110,12 +114,14 @@ function selecionaResposta(elemento, numPergunta, resposta, indice) {
     
         if (resposta === true) {
             elemento.classList.add("correto");
+            qtdAcertos++;
+            qtdRespondidos++;
             const response = [...document.querySelectorAll(`.errado${indice}`)];
             response.forEach(elmts => {
-                console.log(elmts);
                 elmts.classList.add("incorreto");
             })
         } else {
+            qtdRespondidos++;
             const certo = document.querySelector(`.certo${indice}`);
             const response = [...document.querySelectorAll(`.${resposta}`)];
             // response.classList.add("incorreto");
@@ -126,6 +132,24 @@ function selecionaResposta(elemento, numPergunta, resposta, indice) {
             certo.classList.add("correto");
         }
         setTimeout(() => {
+            let promiseLevels = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quiz}`);
+            promiseLevels.then((resposta)=>{
+                const levels = resposta.data.levels;
+                const tela2 = document.querySelector('.tela2')
+                if(qtdRespondidos === levels.length){
+                    for(let i = 0; i < levels.length; i++){
+                        tela2.innerHTML += `
+                            <div class="caixa-resposta">
+                                <h3>${levels[i].minValue}%:${levels[i].title} </h3>
+                            </div>
+                            <div class="imagem-resposta">
+                                <img src=${levels[i].image}/>
+                                <h4>${levels[i].text}</h4>
+                            </div>
+                        `
+                    }
+                }
+            })
             elemento.scrollIntoView();
         }, 2000);
     }
