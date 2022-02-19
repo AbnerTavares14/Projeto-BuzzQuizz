@@ -6,6 +6,13 @@ let qtdAcertos = null;
 let qtdRespondidos = null;
 let quiz = null;
 
+let novoQuizz = null;
+let novoQuizzTitulo = null;
+let novoQuizzImagem = null;
+let novoQuizzPeguntas = [];
+let novoQuizzNiveis = [];
+
+
 const corHex = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
 
 function listarTodosQuizzes() {
@@ -169,12 +176,15 @@ function validaInformacoesBasicas() {
     const titulo = document.querySelector(".titulo1").value;
     const perguntas = document.querySelector(".perguntas1").value;
     const niveis = document.querySelector(".niveis1").value;
+    const urlCorreta = document.querySelector(".url-correta").value;
 
     const verificarUrl = verificarURL('tela3')
     
     if ((titulo.length >= 20 && titulo.length <= 65) && (niveis >= 2) && (perguntas >= 3) && verificarUrl) {
         qtdNiveis = niveis;
         qtdPerguntas = perguntas;
+        novoQuizzTitulo = titulo;
+        novoQuizzImagem = urlCorreta;
         limparCampos('tela3')
         criarPerguntas();
 
@@ -250,39 +260,32 @@ function verificarRepostasIncorretas(respostaIncorreta) {
 //Funcao que valida as informacoes digitadas na tela 3.1, funcao incompleta, ainda não está funcionando
 function validaInformacoesPerguntas() {
     let controlador = 0
+    let cont = 0 
+    
     const pergunta = [...document.querySelectorAll(".questao")]; //Aqui eu tento converter a lista retornada pelo querySelectorAll em um array.
     const color = document.querySelectorAll(".color");
     const respostaCorreta = [...document.querySelectorAll(".resposta-correta")];
     const respostaIncorreta = [...document.querySelectorAll(".resposta-incorreta")];
     const urlCorreta = [...document.querySelectorAll(".url-correta")];
+    const urlRespostaIncorretas = [...document.querySelectorAll(".url-resposta")];
+    
 
     const verificarUrl = !verificarURL('tela3-perguntas')
 
-    respostaIncorreta.forEach((element, indice) => {
-
-        if (element.value === "") {
-            cont++;
-        }
-
-        if ((indice + 1) % 3 === 0 && cont > 2) {
-            alert("Por favor preencha os dados corretamente!");
-            limparCampos('tela3-perguntas')
-            console.log(cont)
-            cont = 0
-        }
-
-    });
-
-    //Laço que verifica se a pergunta tem menos de 20 caracteres, se a resposta correta está vazia e se a url não tem formato de url.
-    //Caso as validaçoes sejam verdadeiras, os campos dos inputs são limpados, é emitido um alert e forçado um break no laço
     for (let i = 0; i < pergunta.length; i++) {
 
-        if (pergunta[i].value.length < 20 || respostaCorreta[i].value.length === null || verificarUrl || !verificaColor(color) || !verificarRepostasIncorretas(respostaIncorreta)) {
+        console.log(pergunta[i].value.length < 20 )
+        console.log(respostaCorreta[i].value === "")
+        console.log(verificarUrl)
+        console.log(!verificaColor(color))
+        console.log(!verificarRepostasIncorretas(respostaIncorreta))
+
+        if (pergunta[i].value.length < 20 || respostaCorreta[i].value === "" || verificarUrl || !verificaColor(color) || !verificarRepostasIncorretas(respostaIncorreta)) {
             controlador++
-            break;
+
         } else {
-            limparCampos('tela3-perguntas')
-            criarNiveis()
+            controlador = 0
+
         }
     }
 
@@ -292,6 +295,56 @@ function validaInformacoesPerguntas() {
 
     } else {
 
+        for (let i = 0; i < pergunta.length; i++) {
+            let respostas = []
+            novoQuizzPeguntas.push({
+                title: pergunta[i].value,
+                color: color[i].value,
+                answers: respostas
+            })
+
+            respostas.push(
+                {
+                    text: respostaCorreta[i].value,
+                    image: urlCorreta[i].value,
+                    isCorrectAnswer: true
+                }
+            
+            )
+
+            respostaIncorreta.forEach((element, indice)=>{
+                
+                if( element.value !== "" && indice <= 2 && i === 1){
+                    respostas.push({
+                        text: element.value,
+                        image:urlRespostaIncorretas [indice].value,
+                        isCorrectAnswer: false
+                    })
+                }
+
+                if( element.value !== "" && indice > 2 && indice < 6 && i === 2){
+                    respostas.push({
+                        text: element.value,
+                        image:urlRespostaIncorretas [indice].value,
+                        isCorrectAnswer: false
+                    })
+                }
+
+                if( element.value !== "" && indice > 5  && i === 3){
+                    respostas.push({
+                        text: element.value,
+                        image:urlRespostaIncorretas [indice].value,
+                        isCorrectAnswer: false
+                    })
+                }
+
+
+
+            })
+
+        }
+
+        limparCampos('tela3-perguntas')
         criarNiveis()
 
     }
@@ -366,20 +419,18 @@ function limparCampos(tela) {
 
 
 function verificaColor(elemento) {
+    let controlador = 0
+    regexp = /^#[0-9A-F]{6}$/
     elemento.forEach(element => {
-        if (element.value.indexOf("#") !== -1) {
-            if (element.value.length === 7) {
-                for (let i = 0; i < 7; i++) {
-                    for (let j = 0; j < corHex; j++) {
-                        if (element.value.indexOf(corHex[j]) === -1) {
-                            return false;
-                        }
-                    }
-                }
-            }
+
+        if (regexp.test(element.value)  === false || element.value === "" ){
+            controlador++
+        
         }
     });
-    return true;
+
+    return (controlador !== 0) ? false : true
+
 }
 
 function verificarURL(tela){
@@ -471,7 +522,15 @@ function validaInformacoesNiveis(){
 
         if (verificarTituloNivel || verificarDescricao|| verificarIntervaloPorcetagem || verificarUrl) {
             controlador++
-            break;
+            
+        }else{
+            novoQuizzNiveis.push({
+                title: nivel[i].value,
+                image: urlCorreta[i].value,
+                text: descricao[i].value,
+                minValue: parseInt(porcentagem[i].value)
+            })
+
         }
     }
 
@@ -490,6 +549,15 @@ function criarSucessoQuizz(){
     const niveis = document.querySelector(".tela3-niveis"); //tela 3.1 onde cria as perguntas
     niveis.classList.add("escondido"); //Some com a tela 3 inicial
     sucessoQuizz.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
+
+    novoQuizz = {
+        title: novoQuizzTitulo,
+        image: novoQuizzImagem,
+        questions:novoQuizzPeguntas,
+        levels: novoQuizzNiveis
+    } 
+
+    console.log(novoQuizz)
 
 }
 
