@@ -6,7 +6,6 @@ let qtdAcertos = null;
 let qtdRespondidos = null;
 let quiz = null;
 
-let novoQuizz = null;
 let novoQuizzTitulo = null;
 let novoQuizzImagem = null;
 let novoQuizzPeguntas = [];
@@ -186,7 +185,8 @@ function validaInformacoesBasicas() {
         novoQuizzTitulo = titulo;
         novoQuizzImagem = urlCorreta;
         limparCampos('tela3')
-        criarPerguntas();
+        // criarPerguntas();
+        criarSucessoQuizz()
 
     } else { //Caso seja falso, é exibido um alert e os inputs são limpos e a página recarregada.
 
@@ -550,14 +550,32 @@ function criarSucessoQuizz(){
     niveis.classList.add("escondido"); //Some com a tela 3 inicial
     sucessoQuizz.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
 
-    novoQuizz = {
+    const promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes',{
         title: novoQuizzTitulo,
         image: novoQuizzImagem,
         questions:novoQuizzPeguntas,
         levels: novoQuizzNiveis
-    } 
+    })
+ 
+    promise.then((resposta) => {
+        const quizzFinalizado = document.querySelector('.tela3-sucessoQuizz .quizzFinalizado')
 
-    console.log(novoQuizz)
+        quizzFinalizado.innerHTML += `
+
+                <div class="quizz ">
+                    <figure>
+                        <div class="degrade"></div>
+                        <img src=${resposta.data.image} />
+                        <p>${resposta.data.title}</p>
+                    </figcation>    
+                </div>
+            
+            `
+        quizzFinalizado.innerHTML += `
+        <button class="p-perguntas" onclick ="exibirQuizz(${resposta.data.id})"><p> Acessar Quizz </p></button>
+        <p> Voltar pra home </p>
+        `;
+    })
 
 }
 
