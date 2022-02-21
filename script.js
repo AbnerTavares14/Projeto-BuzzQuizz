@@ -1,12 +1,14 @@
 let qtdNiveis = null;
 let qtdPerguntas = null;
 let guardaCor = null;
+const quizzDoUsuario = [];
 
+let dadosSerializados = null;
 
 let qtdAcertos = 0;
 let qtdRespondidos = 0;
 
-
+let dadosDeSerializados = JSON.parse(dadosSerializados);
 
 let quiz = null;
 
@@ -14,6 +16,7 @@ let novoQuizzTitulo = null;
 let novoQuizzImagem = null;
 let novoQuizzPeguntas = [];
 let novoQuizzNiveis = [];
+
 
 
 const corHex = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
@@ -24,22 +27,42 @@ function listarTodosQuizzes() {
 
     promise.then((resposta) => {
 
-        const todosQuizzes = document.querySelector('.todosQuizzes .conteudo')
+        const todosQuizzes = document.querySelector('.todosQuizzes .conteudo');
+        const criarQ = document.querySelector(".criarQuizz");
+        // const criarQImagem = document.querySelector(".criarQuizz img");
+        const botaoCriarQuizz = document.querySelector(".botao-criarQuiz");
         if( todosQuizzes !== null){
-
+            const localStorageItem = JSON.parse(localStorage.getItem('buzzquizz-ids'));
             // todosQuizzes.innerHTML = '<h2>Todos os Quizzes</h2>'
-
-            resposta.data.forEach(element => {
-                todosQuizzes.innerHTML += `
-                    <div class="quizz " onclick ="exibirQuizz('.criarQuizz',${element.id})" >
+            resposta.data.forEach((element,index) => {
+                    if(localStorageItem.ids.includes(element.id)){
+                        botaoCriarQuizz.classList.remove("escondido");
+                        criarQ.innerHTML = "";
+                        criarQ.classList.remove("borda");
+                        // criarQImagem.classList.add("expandir");
+                        criarQ.innerHTML += `
+                        <div class="seus-quizzes">
+                        <div class="quizz " onclick ="exibirQuizz('.criarQuizz',${element.id})" >
                         <figure>
                             <div class="degrade"></div>
-                            <img src=${element.image} />
-                            <p>${element.title}</p>
+                                <img src=${element.image} />
+                                <p>${element.title}</p>
                         </figcation>    
-                    </div>
-                
-                `
+                             </div>
+                        </div>
+                        `;
+                    }else{
+                    todosQuizzes.innerHTML += `
+                        <div class="quizz " onclick ="exibirQuizz('.criarQuizz',${element.id})" >
+                            <figure>
+                                <div class="degrade"></div>
+                                <img src=${element.image} />
+                                <p>${element.title}</p>
+                            </figcation>    
+                        </div>
+                    
+                    `
+                }
             });
         }
     })
@@ -163,7 +186,7 @@ function selecionaResposta(elemento, numPergunta, resposta, indice) {
                     let percent = Math.ceil((qtdAcertos / qtdPerguntas.length)*100);
                     for (let i = 0; i < levels.length; i++) {
                         console.log(percent);
-                        if (percent >= levels[i].minValue || levels[i].minValue > nivelExibido.minValue) {                          
+                        if (percent >= levels[i].minValue ) {                          
                             nivelExibido = levels[i];
                         } 
                     }
@@ -605,7 +628,7 @@ function criarSucessoQuizz() {
         image: novoQuizzImagem,
         questions: novoQuizzPeguntas,
         levels: novoQuizzNiveis
-    })
+    });
 
     promise.then((resposta) => {
         const quizzFinalizado = document.querySelector('.tela3-sucessoQuizz .quizzFinalizado')
@@ -620,18 +643,45 @@ function criarSucessoQuizz() {
                     </figcation>    
                 </div>
             
-            `
-        quizzFinalizado.innerHTML += `
-        <button class="p-perguntas" onclick ="exibirQuizz(${resposta.data.id})"><p> Acessar Quizz </p></button>
-        <p> Voltar pra home </p>
-        `;
+            `;
         quizzFinalizado.innerHTML += `
         
         <button class="p-perguntas" onclick ="exibirQuizz('.tela3-sucessoQuizz',${resposta.data.id})"><p> Acessar Quizz </p></button>
         <p class='voltarHome' onclick='voltarHome()'> Voltar pra home </p>
         `;
+        
+        let localStorageItem = { ids: [] }
+
+        if(localStorage.getItem('buzzquizz-ids')) {
+          localStorageItem = JSON.parse(localStorage.getItem('buzzquizz-ids'));
+        }
+        
+        localStorageItem.ids.push(resposta.data.id);
+        
+        localStorage.setItem('buzzquizz-ids', JSON.stringify(localStorageItem));
     })
 
+}
+
+function substituirTelaCriaQuizz(element,tamanho){
+    const criarQ = document.querySelector(".criarQuizz");
+    criarQ.innerHTML = "";
+    for(let i = 0; i < tamanho; i++ ){
+        criarQ.innerHTML += `<div class="botao-criarQuiz">
+        <h1>Seus Quizzes</h1>
+        <ion-icon name="add-circle-outline"></ion-icon>
+        </div>
+        <div class="seus-quizzes">
+        <div class="quizz " onclick ="exibirQuizz('.criarQuizz',${element.id})" >
+        <figure>
+            <div class="degrade"></div>
+                <img src=${element.image} />
+                <p>${element.title}</p>
+        </figcation>    
+             </div>
+        </div>
+        `;
+    }
 }
 
 function comparador() {
