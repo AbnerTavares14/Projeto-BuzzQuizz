@@ -2,8 +2,13 @@ let qtdNiveis = null;
 let qtdPerguntas = null;
 let guardaCor = null;
 
+
 let qtdAcertos = 0;
 let qtdRespondidos = 0;
+
+let qtdAcertos = null;
+let qtdRespondidos = null;
+
 let quiz = null;
 
 let novoQuizzTitulo = null;
@@ -26,8 +31,8 @@ function listarTodosQuizzes() {
 
             resposta.data.forEach(element => {
                 todosQuizzes.innerHTML += `
-
-                    <div class="quizz " onclick ='exibirQuizz(${element.id})' >
+                    <div class="quizz " onclick ='exibirQuizz(${element.id})' 
+                    <div class="quizz " onclick ="exibirQuizz('.criarQuizz',${element.id})" >
                         <figure>
                             <div class="degrade"></div>
                             <img src=${element.image} />
@@ -41,7 +46,8 @@ function listarTodosQuizzes() {
     })
 }
 
-function exibirQuizz(quizz) {
+
+function exibirQuizz(tela,quizz) {
     const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizz}`);
     quiz = quizz;
     promise.then((resposta) => {
@@ -55,6 +61,15 @@ function exibirQuizz(quizz) {
         // console.log(element.questions);
         const tela2 = document.querySelector('.tela2')
         tela2.innerHTML = "";
+        if (tela === '.criarQuizz') {
+        document.querySelector('main').classList.add('mainTela2')
+        document.querySelector('.criarQuizz').classList.add('escondido')
+        document.querySelector('.todosQuizzes').classList.add('escondido')
+        }else{
+            document.querySelector('.tela3-sucessoQuizz').classList.add('escondido')
+        }
+        // console.log(element.questions);
+        const tela2 = document.querySelector('.tela2')
         tela2.innerHTML += `
                 <div class="banner" >
                     <figure>
@@ -178,14 +193,28 @@ function selecionaResposta(elemento, numPergunta, resposta, indice) {
                     tela2.innerHTML += `<button class='p-perguntas' onclick="reiniciarQuizz()"><p>Reiniciar Quizz</p></button>
                         <div class="back-home" onclick="voltarParaPaginaInicial()"><p>Voltar para home</p></div>
                     `
+                if(qtdRespondidos === levels.length){
+                    for(let i = 0; i < levels.length; i++){
+                        tela2.innerHTML += `
+                            <div class="caixa-resposta">
+                                <h3>${levels[i].minValue}%:${levels[i].title} </h3>
+                            </div>
+                            <div class="imagem-resposta">
+                                <img src=${levels[i].image}/>
+                                <h4>${levels[i].text}</h4>
+                            </div>
+                        `
+                    }
+
                 }
-            })
+            });
             elemento.scrollIntoView();
         }, 2000);
     }
 }
 
 listarTodosQuizzes()
+
 
 
 function reiniciarQuizz(){
@@ -197,6 +226,9 @@ function reiniciarQuizz(){
 
 function voltarParaPaginaInicial(){
     window.location.reload();
+
+function voltarHome(){
+    window.location.href = "index.html";
 }
 
 function criarQuiz() {
@@ -222,12 +254,17 @@ function validaInformacoesBasicas() {
         criarSucessoQuizz()
 
     } else { //Caso seja falso, é exibido um alert e os inputs são limpos e a página recarregada.
+        criarPerguntas();
+        //criarSucessoQuizz()
+
+    } else { 
 
         alert("Por favor, preencha os dados corretamente!");
         limparCampos('tela3')
         window.location.reload;
     }
 }
+
 
 //Funcao responsavel por fazer aparecer as perguntas posteriores a primeira assim que o usuario clicar no icone.
 function removerEscondido(elemento,tela, item) {
@@ -236,13 +273,13 @@ function removerEscondido(elemento,tela, item) {
     elemento.classList.add("escondido");
 }
 
-//Funcao responsavel por criar as perguntas dinamicamente de acordo com a quantidade de perguntas informadas pelo usuario
+
+
 function criarPerguntas() {
-    const pergunta = document.querySelector(".tela3-perguntas"); //tela 3.1 onde cria as perguntas
-    const remocao = document.querySelector(".tela3"); //Tela 3 inicial
-    remocao.classList.add("escondido"); //Some com a tela 3 inicial
-    pergunta.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
-    //Laço que cria o layout da tela 3.1 dinamicamente
+    document.querySelector(".tela3").classList.add("escondido");
+    const pergunta = document.querySelector(".tela3-perguntas"); 
+    pergunta.classList.remove("escondido");
+    
     for (let i = 0; i < qtdPerguntas - 1; i++) {
         pergunta.innerHTML += `<div class="selecione">
         <h2>Pergunta ${i + 2}</h2>
@@ -512,11 +549,13 @@ function verificarPorcentagem(){
 }
 
 function criarNiveis() {
-
     const pergunta = document.querySelector(".tela3-perguntas"); //tela 3.1 onde cria as perguntas
     const niveis = document.querySelector(".tela3-niveis"); //tela 3.1 onde cria as perguntas
     pergunta.classList.add("escondido"); //Some com a tela 3 inicial
     niveis.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
+    document.querySelector(".tela3-perguntas").classList.add("escondido");
+    const niveis = document.querySelector(".tela3-niveis"); 
+    niveis.classList.remove("escondido"); 
 
     for (let i = 0; i < qtdNiveis - 1; i++) {
         niveis.innerHTML += `<div class="selecione">
@@ -533,6 +572,9 @@ function criarNiveis() {
     </div>`
     }
     //Após o fim do laço, adiciono o botão dinamicamente no final da página
+
+
+
     niveis.innerHTML += `<button class="p-perguntas" onclick="validaInformacoesNiveis()"><p> Finalizar Quizz </p></button>`;
     
 }
@@ -578,10 +620,14 @@ function validaInformacoesNiveis(){
 }
 
 function criarSucessoQuizz(){
+
     const sucessoQuizz = document.querySelector(".tela3-sucessoQuizz"); //tela 3.1 onde cria as perguntas
     const niveis = document.querySelector(".tela3-niveis"); //tela 3.1 onde cria as perguntas
     niveis.classList.add("escondido"); //Some com a tela 3 inicial
     sucessoQuizz.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
+    document.querySelector(".tela3-sucessoQuizz").classList.remove("escondido");
+    document.querySelector(".tela3-niveis").classList.add("escondido");
+    document.querySelector(".tela3").classList.add("escondido"); 
 
     const promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes',{
         title: novoQuizzTitulo,
@@ -608,6 +654,14 @@ function criarSucessoQuizz(){
         <button class="p-perguntas" onclick ="exibirQuizz(${resposta.data.id})"><p> Acessar Quizz </p></button>
         <p> Voltar pra home </p>
         `;
+            // <img src= 'Rectangle 34.png' />
+            // <p>'quiz teste'</p>
+        quizzFinalizado.innerHTML += `
+        
+        <button class="p-perguntas" onclick ="exibirQuizz('.tela3-sucessoQuizz',${resposta.data.id})"><p> Acessar Quizz </p></button>
+        <p class='voltarHome' onclick='voltarHome()'> Voltar pra home </p>
+        `;
+        // <button class="p-perguntas" onclick ="exibirQuizz('.tela3-sucessoQuizz',6049)"><p> Acessar Quizz </p></button>
     })
 
 }

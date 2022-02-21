@@ -253,6 +253,7 @@ figure .degradeBanner{
     text-align: center;
 }
 
+
 .imagem-resposta{
     display: flex;
     flex-direction: column;
@@ -291,7 +292,6 @@ figure .degradeBanner{
     font-weight: 400;
     font-size: 18px;
     color: #818181;
-    
 }
 
 .nao-selecionado{
@@ -409,6 +409,48 @@ input::placeholder{
     overflow-y: hidden;
 }
 
+
+}
+
+.tela3-sucessoQuizz  .quizzFinalizado{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tela3-sucessoQuizz .quizz{
+    margin-top: 29px;
+}
+
+.tela3-sucessoQuizz .quizz p{
+    text-align: left;
+}
+
+.tela3-sucessoQuizz .p-perguntas{
+    width: 220.32px;
+    height: 44px;
+    background-color: #EC362D;
+    border-radius: 15px;
+    border: 0 none;
+    outline: none;
+    margin-top: 24px;
+    margin-left: 0px;
+    margin-bottom: 9px;
+}
+
+.tela3-sucessoQuizz .voltarHome{
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #818181
+}
 /* .tela3-niveis .descricao{
     display: flex;
     text-align:end;
