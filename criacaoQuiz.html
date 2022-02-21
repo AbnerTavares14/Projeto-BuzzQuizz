@@ -4,6 +4,7 @@
 <head>
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="mediaQuery.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -20,69 +21,74 @@
         <h1>BuzzQuizz</h1>
     </header>
     <main class="tela3-verdadeira">
-        <section class="tela3">
-            <h1>Comece pelo começo</h1>
-            <section class="inicio">
-                <div class="titulo">
-                    <input class="titulo1" type="textarea" placeholder="Título do seu quizz">
-                </div>
-                <div class="url">
-                    <input class="url-correta" type="url" placeholder="URL da imagem do seu quizz" />
-                </div>
-                <div class="perguntas">
-                    <input class="perguntas1" type="textarea" placeholder="Quantidade de perguntas do quizz" />
-                </div>
-                <div class="niveis">
-                    <input class="niveis1" type="textarea" placeholder="Quantidade de níveis do quizz" />
-                </div>
-                <button class="p-perguntas" onclick="validaInformacoesBasicas()">
-                    <p>Prosseguir pra criar perguntas</p>
-                </button>
+        <div class="conteudo">
+            <section class="tela3">
+                <h1>Comece pelo começo</h1>
+                <section class="inicio">
+                    <div class = 'campos'>
+                        <div class="titulo">
+                            <input class="titulo1" type="textarea" placeholder="Título do seu quizz">
+                        </div>
+                        <div class="url">
+                            <input class="url-correta" type="url" placeholder="URL da imagem do seu quizz" />
+                        </div>
+                        <div class="perguntas">
+                            <input class="perguntas1" type="textarea" placeholder="Quantidade de perguntas do quizz" />
+                        </div>
+                        <div class="niveis">
+                            <input class="niveis1" type="textarea" placeholder="Quantidade de níveis do quizz" />
+                        </div>
+                    </div>
+                    <button class="p-perguntas" onclick="validaInformacoesBasicas()">
+                        <p>Prosseguir pra criar perguntas</p>
+                    </button>
+                </section>
+                
             </section>
-        </section>
-        <section class="tela3-perguntas escondido">
-            <h1>Crie suas perguntas</h1>
-            <section class="perguntas-respostas">
-                <div class="cria-pergunta">
-                    <h2>Pergunta 1</h2>
-                    <input type="textarea" class="questao" placeholder="Texto da pergunta">
-                    <input type="textarea" class="color" placeholder="Cor de fundo da pergunta">
-                    <h2>Resposta correta</h2>
-                    <input type="textarea" class="resposta-correta" placeholder="Resposta correta">
-                    <input type="url" class="url-correta" placeholder="URL da imagem">
-                    <h2>Respostas incorretas</h2>
-                    <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 1">
-                    <input type="url" class="url-resposta" placeholder="URL da imagem 1">
-                    <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 2">
-                    <input type="url" class="url-resposta" placeholder="URL da imagem 2">
-                    <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 3">
-                    <input type="url" class="url-resposta" placeholder="URL da imagem 3">
-                </div>
+            <section class="tela3-perguntas escondido">
+                <h1>Crie suas perguntas</h1>
+                <section class="perguntas-respostas">
+                    <div class="cria-pergunta">
+                        <h2>Pergunta 1</h2>
+                        <input type="textarea" class="questao" placeholder="Texto da pergunta">
+                        <input type="textarea" class="color" placeholder="Cor de fundo da pergunta">
+                        <h2>Resposta correta</h2>
+                        <input type="textarea" class="resposta-correta" placeholder="Resposta correta">
+                        <input type="url" class="url-correta" placeholder="URL da imagem">
+                        <h2>Respostas incorretas</h2>
+                        <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 1">
+                        <input type="url" class="url-resposta" placeholder="URL da imagem 1">
+                        <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 2">
+                        <input type="url" class="url-resposta" placeholder="URL da imagem 2">
+                        <input type="textarea" class="resposta-incorreta" placeholder="Resposta incorreta 3">
+                        <input type="url" class="url-resposta" placeholder="URL da imagem 3">
+                    </div>
+                </section>
             </section>
-        </section>
 
-        <section class="tela3-niveis escondido">
-            <h1>Agora, decida os níveis!</h1>
-            <section class="perguntas-niveis">
-                <div class="cria-nivel">
-                    
-                    <h2>Nivel 1</h2>
-                    <input type="textarea" class="nivel" placeholder="Titulo do Nivel">
-                    <input type="textarea" class="porcentagem" placeholder="% de acerto mínima">
-                    <input type="url" class="url-correta" placeholder="URL da imagem do nível">
-                    <input type="textarea" class="descricao" placeholder="Descrição do nível">
+            <section class="tela3-niveis escondido">
+                <h1>Agora, decida os níveis!</h1>
+                <section class="perguntas-niveis">
+                    <div class="cria-nivel">
+                        
+                        <h2>Nivel 1</h2>
+                        <input type="textarea" class="nivel" placeholder="Titulo do Nivel">
+                        <input type="textarea" class="porcentagem" placeholder="% de acerto mínima">
+                        <input type="url" class="url-correta" placeholder="URL da imagem do nível">
+                        <input type="textarea" class="descricao" placeholder="Descrição do nível">
 
-                </div>
+                    </div>
+                </section>
             </section>
-        </section>
 
-        <section class="tela3-sucessoQuizz escondido">
-            <h1>Seu quizz está pronto!</h1>
-            <section class="quizzFinalizado">
+            <section class="tela3-sucessoQuizz escondido">
+                <h1>Seu quizz está pronto!</h1>
+                <section class="quizzFinalizado">
 
+                </section>
             </section>
-        </section>
-        <section class="tela2"> </section>
+            <section class="tela2"> </section>
+        </div>
     </main>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"> </script>

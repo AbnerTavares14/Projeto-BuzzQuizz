@@ -1,0 +1,145 @@
+@media (min-width: 1100px) {
+
+body{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content:space-between;
+
+}
+main{
+    padding: 0px;
+}
+
+
+main .criarQuizz{
+    margin-top: 77px;
+    width: 1051px;
+    overflow-y: hidden;
+}
+
+.criarQuizz .criar-quiz{
+    overflow-y: hidden;
+}
+
+.criarQuizz h1{
+    margin: 0 auto;
+}
+.todosQuizzes{width: 1051px;}
+
+.todosQuizzes .conteudo{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.conteudo .quizz{
+    width: 340px;
+    height: 181px;
+    margin-right: 15px;
+    overflow-y: hidden;
+}
+
+.quizz:nth-child(3n){margin-right: 0px;}
+
+
+
+.quizz img{
+    object-fit: contain;
+}
+
+.tela2{
+    width: 100%;
+}
+.mainTela2{
+    width: 100%;
+}
+.tela2 .banner{
+    height: 227px;
+}
+
+.banner {
+    height: 227px;
+}
+
+.banner  figure{
+    height: 227px;
+}
+
+.banner figure img{
+    height: 227px;
+}
+
+figure .degradeBanner{
+    height: 227px;
+}
+
+.banner figure p{
+    overflow: hidden;
+}
+
+
+.pergunta{
+    width: 759px;
+    margin-top: 42px;
+}
+
+.pergunta .conteudo{
+    width: 688.16px
+
+}
+
+.conteudo .titulo{
+    width: 100%;
+    height: 137.99px;
+}
+
+.perguntas .opcoes img{
+    width: 331.94px;
+    height: 175.2px;
+}
+
+.perguntas .opcoes p{
+    width: 331.94px;
+    overflow: hidden;
+}
+
+.tela3-verdadeira{
+    padding: 0px;
+    height: 100%;
+}
+
+.tela3-verdadeira .conteudo{
+    width: 600px;
+    align-items: center;
+    
+    /* display: flex;
+    justify-content:center; */
+}
+
+.tela3-verdadeira .conteudo .p-perguntas{
+    margin-left: 113px;
+}
+
+.conteudo .inicio .titulo {
+    width: 98%;
+    height: 46px;
+}
+
+
+.tela3 
+{
+    width: 100%;
+
+}
+
+.tela3-perguntas{
+    margin-top: 38px;
+
+}
+
+/* .tela3-perguntas .p-perguntas{
+    margin-left: 113px;
+} */
+
+
+}

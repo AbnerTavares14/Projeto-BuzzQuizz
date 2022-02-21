@@ -19,10 +19,10 @@ function listarTodosQuizzes() {
     const promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes')
 
     promise.then((resposta) => {
-        const todosQuizzes = document.querySelector('.todosQuizzes')
+        const todosQuizzes = document.querySelector('.todosQuizzes .conteudo')
         if( todosQuizzes !== null){
 
-            todosQuizzes.innerHTML = '<h2>Todos os Quizzes</h2>'
+            // todosQuizzes.innerHTML = '<h2>Todos os Quizzes</h2>'
 
             resposta.data.forEach(element => {
                 todosQuizzes.innerHTML += `

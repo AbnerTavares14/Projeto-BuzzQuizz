@@ -3,6 +3,10 @@
     overflow-x: hidden;
 }
 
+/* body{
+    background: #E5E5E5;
+} */
+
 
 header{
     display: flex;
@@ -20,6 +24,7 @@ header h1{
     font-weight: 700;
     line-height: 43.36px;
     color: #FFFFFF;
+    overflow-y: hidden;
 }
 
 .criarQuizz{
@@ -79,13 +84,16 @@ main h2{
 
 .todosQuizzes .quizz{
     margin-bottom: 14px;
-    
-    
+    width: 100%;
+    height: 181px;
+    overflow: hidden;
 }
 
 .quizz figure{
     position: relative;
-     
+    height: 181px;
+    overflow: hidden;
+    
 }
 
 .quizz figure .degrade{
@@ -110,9 +118,9 @@ main h2{
     line-height: 22.27px
 }
 
-
 .quizz figure img{
     width: 100%;
+    object-fit: contain;
     border-radius: 5px;
 }
 
@@ -177,8 +185,7 @@ figure .degradeBanner{
     margin-top: 24px;
     align-items: center;
     justify-content: center;
-    /* background: #FFFFFF; */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+    
 }
 
 .pergunta .conteudo{
@@ -226,6 +233,11 @@ figure .degradeBanner{
 .perguntas .opcoes img{
     width: 163px;
     height: 113px;
+}
+
+.perguntas .opcoes p{
+    width: 163px;
+    overflow: hidden;
 }
 
 .perguntas .opcoes .h3{
@@ -339,8 +351,17 @@ input::placeholder{
     color:#000000;
 }
 
+.campos{
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+
+}
+
 .cria-pergunta{
     position: relative;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 }
 
 .cria-pergunta ion-icon{
