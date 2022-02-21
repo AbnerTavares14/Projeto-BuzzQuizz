@@ -54,6 +54,7 @@ function exibirQuizz(quizz) {
         document.querySelector('.todosQuizzes').classList.add('escondido')
         // console.log(element.questions);
         const tela2 = document.querySelector('.tela2')
+        tela2.innerHTML = "";
         tela2.innerHTML += `
                 <div class="banner" >
                     <figure>
@@ -174,6 +175,9 @@ function selecionaResposta(elemento, numPergunta, resposta, indice) {
                                 `
                         }
                     }
+                    tela2.innerHTML += `<button class='p-perguntas' onclick="reiniciarQuizz()"><p>Reiniciar Quizz</p></button>
+                        <div class="back-home" onclick="voltarParaPaginaInicial()"><p>Voltar para home</p></div>
+                    `
                 }
             })
             elemento.scrollIntoView();
@@ -182,6 +186,18 @@ function selecionaResposta(elemento, numPergunta, resposta, indice) {
 }
 
 listarTodosQuizzes()
+
+
+function reiniciarQuizz(){
+    window.scroll({
+        top:1
+    });
+    exibirQuizz(quiz);
+}
+
+function voltarParaPaginaInicial(){
+    window.location.reload();
+}
 
 function criarQuiz() {
     window.location.href = "criacaoQuiz.html";

@@ -275,6 +275,25 @@ figure .degradeBanner{
     margin: 0 auto;
 }
 
+.back-home{
+    display: flex;
+    width: 219.64px;
+    height: 44px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.back-home p{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    color: #818181;
+    
+}
+
 .nao-selecionado{
     opacity: 0.3;
 }
@@ -330,7 +349,7 @@ input::placeholder{
     border: 0 none;
     outline: none;
     margin-top: 53px;
-    margin-left: 25px;
+    margin-left: 35px;
 }
 
 .p-perguntas p{
