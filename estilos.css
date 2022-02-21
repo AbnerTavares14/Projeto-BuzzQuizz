@@ -254,6 +254,7 @@ figure .degradeBanner{
     width: 340px;
     height: 54px;
     background-color: #EC362D;
+    margin: 0 auto;
 }
 
 .caixa-resposta h3{
@@ -264,18 +265,45 @@ figure .degradeBanner{
     text-align: center;
 }
 
+
+.imagem-resposta{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .imagem-resposta h4{
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     color: #484848;
     font-size: 17px;
     line-height: 19.25px;
-    text-align: center;
+    text-align: center; 
 }
 
 .imagem-resposta img{
     width: 340px;
     height: 255px;
+    margin: 0 auto;
+}
+
+.back-home{
+    display: flex;
+    width: 219.64px;
+    height: 44px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.back-home p{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    color: #818181;
 }
 
 .nao-selecionado{
@@ -304,6 +332,11 @@ figure .degradeBanner{
     margin: 0 auto;
     margin-top: 20px    ;
     margin-bottom: 50px;
+    overflow-y: hidden;
+}
+
+.inicio{
+    background-color: #FFFFFF;
 }
 
 input{
@@ -332,7 +365,7 @@ input::placeholder{
     border: 0 none;
     outline: none;
     margin-top: 53px;
-    margin-left: 25px;
+    margin-left: 35px;
 }
 
 .p-perguntas p{
@@ -398,7 +431,9 @@ input::placeholder{
     text-align: center;
     font-size: 20px;
     color:#000000;
+    overflow-y: hidden;
 }
+
 
 .tela3-sucessoQuizz  .quizzFinalizado{
     display: flex;

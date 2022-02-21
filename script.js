@@ -2,8 +2,12 @@ let qtdNiveis = null;
 let qtdPerguntas = null;
 let guardaCor = null;
 
-let qtdAcertos = null;
-let qtdRespondidos = null;
+
+let qtdAcertos = 0;
+let qtdRespondidos = 0;
+
+
+
 let quiz = null;
 
 let novoQuizzTitulo = null;
@@ -19,6 +23,7 @@ function listarTodosQuizzes() {
     const promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes')
 
     promise.then((resposta) => {
+
         const todosQuizzes = document.querySelector('.todosQuizzes .conteudo')
         if( todosQuizzes !== null){
 
@@ -26,7 +31,6 @@ function listarTodosQuizzes() {
 
             resposta.data.forEach(element => {
                 todosQuizzes.innerHTML += `
-
                     <div class="quizz " onclick ="exibirQuizz('.criarQuizz',${element.id})" >
                         <figure>
                             <div class="degrade"></div>
@@ -41,22 +45,26 @@ function listarTodosQuizzes() {
     })
 }
 
-function exibirQuizz(tela,quizz) {
+
+function exibirQuizz(tela, quizz) {
     const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizz}`);
     quiz = quizz;
     promise.then((resposta) => {
         let element = resposta.data;
         // console.log(resposta.data);
         // resposta.data.forEach(element => {
+        // if (element.id === quizz) {
+        // console.log(element.questions);
+        const tela2 = document.querySelector('.tela2')
+        tela2.innerHTML = "";
         if (tela === '.criarQuizz') {
-        document.querySelector('main').classList.add('mainTela2')
-        document.querySelector('.criarQuizz').classList.add('escondido')
-        document.querySelector('.todosQuizzes').classList.add('escondido')
-        }else{
+            document.querySelector('main').classList.add('mainTela2')
+            document.querySelector('.criarQuizz').classList.add('escondido')
+            document.querySelector('.todosQuizzes').classList.add('escondido')
+        } else {
             document.querySelector('.tela3-sucessoQuizz').classList.add('escondido')
         }
         // console.log(element.questions);
-        const tela2 = document.querySelector('.tela2')
         tela2.innerHTML += `
                 <div class="banner" >
                     <figure>
@@ -114,16 +122,17 @@ function exibirQuizz(tela,quizz) {
 
 function selecionaResposta(elemento, numPergunta, resposta, indice) {
     const elementos = [...document.querySelectorAll(`.${numPergunta} .opcoes figure`)];
+    const qtdPerguntas = document.querySelectorAll(".pergunta");
     //console.log(elementos);
-    if(!elemento.classList.contains("nao-selecionado")){
+    if (!elemento.classList.contains("nao-selecionado")) {
         elementos.forEach(elmts => {
             elmts.classList.add("nao-selecionado");
         });
         // let guardaElemento = elemento.children;
         // console.log(elemento.children);
         elemento.classList.remove("nao-selecionado");
-    
-    
+
+
         if (resposta === true) {
             elemento.classList.add("correto");
             qtdAcertos++;
@@ -145,23 +154,33 @@ function selecionaResposta(elemento, numPergunta, resposta, indice) {
         }
         setTimeout(() => {
             let promiseLevels = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quiz}`);
-            promiseLevels.then((resposta)=>{
+            promiseLevels.then((resposta) => {
                 const levels = resposta.data.levels;
                 const tela2 = document.querySelector('.tela2')
-                if(qtdRespondidos === levels.length){
-                    for(let i = 0; i < levels.length; i++){
-                        tela2.innerHTML += `
-                            <div class="caixa-resposta">
-                                <h3>${levels[i].minValue}%:${levels[i].title} </h3>
-                            </div>
-                            <div class="imagem-resposta">
-                                <img src=${levels[i].image}/>
-                                <h4>${levels[i].text}</h4>
-                            </div>
-                        `
+                console.log(qtdAcertos);
+                let nivelExibido = {};
+                if (qtdRespondidos === qtdPerguntas.length) {
+                    let percent = Math.ceil((qtdAcertos / qtdPerguntas.length)*100);
+                    for (let i = 0; i < levels.length; i++) {
+                        console.log(percent);
+                        if (percent >= levels[i].minValue || levels[i].minValue > nivelExibido.minValue) {                          
+                            nivelExibido = levels[i];
+                        } 
                     }
+                    console.log(nivelExibido);
+                    tela2.innerHTML += `
+                        <div class="caixa-resposta">
+                            <h3>${nivelExibido.minValue}%:${nivelExibido.title} </h3>
+                        </div>
+                        <div class="imagem-resposta">
+                            <img src=${nivelExibido.image}/>
+                            <h4>${nivelExibido.text}</h4>
+                        </div>
+                        <button class='p-perguntas' onclick="reiniciarQuizz()"><p>Reiniciar Quizz</p></button>
+                            <div class="back-home" onclick="voltarParaPaginaInicial()"><p>Voltar para home</p></div>
+                        `
                 }
-            })
+            });
             elemento.scrollIntoView();
         }, 2000);
     }
@@ -169,9 +188,24 @@ function selecionaResposta(elemento, numPergunta, resposta, indice) {
 
 listarTodosQuizzes()
 
-function voltarHome(){
+
+
+function reiniciarQuizz() {
+    window.scroll({
+        top: 1
+    });
+    exibirQuizz(".criarQuizz",quiz);
+}
+
+function voltarParaPaginaInicial() {
+    window.location.reload();
+}
+
+
+function voltarHome() {
     window.location.href = "index.html";
 }
+
 
 function criarQuiz() {
     window.location.href = "criacaoQuiz.html";
@@ -185,7 +219,7 @@ function validaInformacoesBasicas() {
     const urlCorreta = document.querySelector(".url-correta").value;
 
     const verificarUrl = verificarURL('tela3')
-    
+
     if ((titulo.length >= 20 && titulo.length <= 65) && (niveis >= 2) && (perguntas >= 3) && verificarUrl) {
         qtdNiveis = niveis;
         qtdPerguntas = perguntas;
@@ -193,28 +227,31 @@ function validaInformacoesBasicas() {
         novoQuizzImagem = urlCorreta;
         limparCampos('tela3')
         criarPerguntas();
+
+    } else { //Caso seja falso, é exibido um alert e os inputs são limpos e a página recarregada.
+        criarPerguntas();
         //criarSucessoQuizz()
-
-    } else { 
-
         alert("Por favor, preencha os dados corretamente!");
         limparCampos('tela3')
         window.location.reload;
     }
 }
 
-function removerEscondido(elemento,tela, item) {
+
+//Funcao responsavel por fazer aparecer as perguntas posteriores a primeira assim que o usuario clicar no icone.
+function removerEscondido(elemento, tela, item) {
     const novoItem = document.querySelector(`.${tela} .${item}`);
     novoItem.classList.remove("escondido");
     elemento.classList.add("escondido");
 }
 
 
+
 function criarPerguntas() {
     document.querySelector(".tela3").classList.add("escondido");
-    const pergunta = document.querySelector(".tela3-perguntas"); 
+    const pergunta = document.querySelector(".tela3-perguntas");
     pergunta.classList.remove("escondido");
-    
+
     for (let i = 0; i < qtdPerguntas - 1; i++) {
         pergunta.innerHTML += `<div class="selecione">
         <h2>Pergunta ${i + 2}</h2>
@@ -265,21 +302,21 @@ function verificarRepostasIncorretas(respostaIncorreta) {
 //Funcao que valida as informacoes digitadas na tela 3.1, funcao incompleta, ainda não está funcionando
 function validaInformacoesPerguntas() {
     let controlador = 0
-    let cont = 0 
-    
+    let cont = 0
+
     const pergunta = [...document.querySelectorAll(".questao")]; //Aqui eu tento converter a lista retornada pelo querySelectorAll em um array.
     const color = document.querySelectorAll(".color");
     const respostaCorreta = [...document.querySelectorAll(".resposta-correta")];
     const respostaIncorreta = [...document.querySelectorAll(".resposta-incorreta")];
     const urlCorreta = [...document.querySelectorAll(".tela3-perguntas .url-correta")];
     const urlRespostaIncorretas = [...document.querySelectorAll(".url-resposta")];
-    
+
 
     const verificarUrl = !verificarURL('tela3-perguntas')
 
     for (let i = 0; i < pergunta.length; i++) {
 
-        console.log(pergunta[i].value.length < 20 )
+        console.log(pergunta[i].value.length < 20)
         console.log(respostaCorreta[i].value === "")
         console.log(verificarUrl)
         console.log(!verificaColor(color))
@@ -299,7 +336,7 @@ function validaInformacoesPerguntas() {
         limparCampos('tela3-perguntas')
 
     } else {
-        
+
         for (let i = 0; i < pergunta.length; i++) {
             let respostas = []
             novoQuizzPeguntas.push({
@@ -314,32 +351,32 @@ function validaInformacoesPerguntas() {
                     image: urlCorreta[i].value,
                     isCorrectAnswer: true
                 }
-            
+
             )
 
 
-            respostaIncorreta.forEach((element, indice)=>{
-                
-                if( element.value !== "" && indice < 3 && i === 0){
+            respostaIncorreta.forEach((element, indice) => {
+
+                if (element.value !== "" && indice < 3 && i === 0) {
                     respostas.push({
                         text: element.value,
-                        image:urlRespostaIncorretas [indice].value,
+                        image: urlRespostaIncorretas[indice].value,
                         isCorrectAnswer: false
                     })
                 }
 
-                if( element.value !== "" && indice > 2 && indice < 6 && i === 1){
+                if (element.value !== "" && indice > 2 && indice < 6 && i === 1) {
                     respostas.push({
                         text: element.value,
-                        image:urlRespostaIncorretas [indice].value,
+                        image: urlRespostaIncorretas[indice].value,
                         isCorrectAnswer: false
                     })
                 }
 
-                if( element.value !== "" && indice > 5  && i === 2){
+                if (element.value !== "" && indice > 5 && i === 2) {
                     respostas.push({
                         text: element.value,
-                        image:urlRespostaIncorretas [indice].value,
+                        image: urlRespostaIncorretas[indice].value,
                         isCorrectAnswer: false
                     })
                 }
@@ -358,7 +395,7 @@ function validaInformacoesPerguntas() {
 }
 
 function limparCampos(tela) {
-    if(tela === 'tela3'){
+    if (tela === 'tela3') {
 
         let limpaTitulo = document.querySelector(" .tela3 .titulo1");
         limpaTitulo.value = "";
@@ -369,10 +406,10 @@ function limparCampos(tela) {
         let limpaNiveis = document.querySelector(".tela3 .niveis1");
         limpaNiveis.value = "";
 
-    }else{
-        if(tela === 'tela3-perguntas'){
+    } else {
+        if (tela === 'tela3-perguntas') {
 
-            const pergunta = [...document.querySelectorAll(".tela3-perguntas .questao")]; 
+            const pergunta = [...document.querySelectorAll(".tela3-perguntas .questao")];
             const color = document.querySelectorAll(".tela3-perguntas .color");
             const respostaCorreta = [...document.querySelectorAll(".tela3-perguntas .resposta-correta")];
             const respostaIncorreta = [...document.querySelectorAll(".tela3-perguntas .resposta-incorreta")];
@@ -394,7 +431,7 @@ function limparCampos(tela) {
                 element.value = '';
             });
 
-        }else{
+        } else {
 
             const nivel = [...document.querySelectorAll(".nivel")];
             const porcentagem = [...document.querySelectorAll(".porcentagem")];
@@ -429,9 +466,9 @@ function verificaColor(elemento) {
     regexp = /^#[0-9A-F]{6}$/
     elemento.forEach(element => {
 
-        if (regexp.test(element.value)  === false || element.value === "" ){
+        if (regexp.test(element.value) === false || element.value === "") {
             controlador++
-        
+
         }
     });
 
@@ -439,17 +476,17 @@ function verificaColor(elemento) {
 
 }
 
-function verificarURL(tela){
+function verificarURL(tela) {
 
     const urlCorreta = [...document.querySelectorAll(`.${tela} .url-correta`)]
 
     let controlador = 0
-    regexp =  /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+    regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
 
 
     for (let i = 0; i < urlCorreta.length; i++) {
 
-        if(regexp.test(urlCorreta[i].value) === false){
+        if (regexp.test(urlCorreta[i].value) === false) {
             controlador++
             break;
         }
@@ -459,9 +496,9 @@ function verificarURL(tela){
     return (controlador !== 0) ? false : true
 }
 
-function verificarPorcentagem(){
+function verificarPorcentagem() {
 
-        
+
     const porcentagem = [...document.querySelectorAll(`.tela3-niveis .porcentagem`)]
 
     let nivelZero = 0
@@ -469,25 +506,27 @@ function verificarPorcentagem(){
 
     for (let i = 0; i < porcentagem.length; i++) {
 
-        if(parseInt(porcentagem[i].value) === 0){
+        if (parseInt(porcentagem[i].value) === 0) {
             nivelZero++
-        }else{
-            if((parseInt(porcentagem[i].value) >= 0 &&  parseInt(porcentagem[i].value) <=100)){
-               controlador++
+        } else {
+            if ((parseInt(porcentagem[i].value) >= 0 && parseInt(porcentagem[i].value) <= 100)) {
+                controlador++
             }
         }
 
     }
 
-    
+
     return (nivelZero !== 0 && controlador !== 0) ? true : false
 }
 
 function criarNiveis() {
-
+    const pergunta = document.querySelector(".tela3-perguntas"); //tela 3.1 onde cria as perguntas
+    const niveis = document.querySelector(".tela3-niveis"); //tela 3.1 onde cria as perguntas
+    pergunta.classList.add("escondido"); //Some com a tela 3 inicial
+    niveis.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
     document.querySelector(".tela3-perguntas").classList.add("escondido");
-    const niveis = document.querySelector(".tela3-niveis"); 
-    niveis.classList.remove("escondido"); 
+    niveis.classList.remove("escondido");
 
     for (let i = 0; i < qtdNiveis - 1; i++) {
         niveis.innerHTML += `<div class="selecione">
@@ -503,12 +542,15 @@ function criarNiveis() {
 
     </div>`
     }
+    //Após o fim do laço, adiciono o botão dinamicamente no final da página
+
+
 
     niveis.innerHTML += `<button class="p-perguntas" onclick="validaInformacoesNiveis()"><p> Finalizar Quizz </p></button>`;
-    
+
 }
 
-function validaInformacoesNiveis(){
+function validaInformacoesNiveis() {
     let controlador = 0
 
     const nivel = [...document.querySelectorAll(".nivel")];
@@ -523,13 +565,13 @@ function validaInformacoesNiveis(){
         const verificarIntervaloPorcetagem = !verificarPorcentagem()
         const verificarUrl = !verificarURL('tela3-niveis')
 
-        if (verificarTituloNivel || verificarDescricao|| verificarIntervaloPorcetagem || verificarUrl) {
+        if (verificarTituloNivel || verificarDescricao || verificarIntervaloPorcetagem || verificarUrl) {
             controlador++
-            
+
         }
     }
 
-    if(controlador !== 0){
+    if (controlador !== 0) {
         alert("Por favor preencha os dados corretamente!");
         limparCampos('tela3-niveis')
 
@@ -548,18 +590,23 @@ function validaInformacoesNiveis(){
 
 }
 
-function criarSucessoQuizz(){
+function criarSucessoQuizz() {
+
+    const sucessoQuizz = document.querySelector(".tela3-sucessoQuizz"); 
+    const niveis = document.querySelector(".tela3-niveis"); 
+    niveis.classList.add("escondido"); 
+    sucessoQuizz.classList.remove("escondido"); 
     document.querySelector(".tela3-sucessoQuizz").classList.remove("escondido");
     document.querySelector(".tela3-niveis").classList.add("escondido");
-    document.querySelector(".tela3").classList.add("escondido"); 
+    document.querySelector(".tela3").classList.add("escondido");
 
-    const promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes',{
+    const promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', {
         title: novoQuizzTitulo,
         image: novoQuizzImagem,
-        questions:novoQuizzPeguntas,
+        questions: novoQuizzPeguntas,
         levels: novoQuizzNiveis
     })
- 
+
     promise.then((resposta) => {
         const quizzFinalizado = document.querySelector('.tela3-sucessoQuizz .quizzFinalizado')
 
@@ -574,14 +621,15 @@ function criarSucessoQuizz(){
                 </div>
             
             `
-            // <img src= 'Rectangle 34.png' />
-            // <p>'quiz teste'</p>
+        quizzFinalizado.innerHTML += `
+        <button class="p-perguntas" onclick ="exibirQuizz(${resposta.data.id})"><p> Acessar Quizz </p></button>
+        <p> Voltar pra home </p>
+        `;
         quizzFinalizado.innerHTML += `
         
         <button class="p-perguntas" onclick ="exibirQuizz('.tela3-sucessoQuizz',${resposta.data.id})"><p> Acessar Quizz </p></button>
         <p class='voltarHome' onclick='voltarHome()'> Voltar pra home </p>
         `;
-        // <button class="p-perguntas" onclick ="exibirQuizz('.tela3-sucessoQuizz',6049)"><p> Acessar Quizz </p></button>
     })
 
 }
