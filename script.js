@@ -30,7 +30,6 @@ function listarTodosQuizzes() {
 
             resposta.data.forEach(element => {
                 todosQuizzes.innerHTML += `
-                    <div class="quizz " onclick ='exibirQuizz(${element.id})' 
                     <div class="quizz " onclick ="exibirQuizz('.criarQuizz',${element.id})" >
                         <figure>
                             <div class="degrade"></div>
@@ -54,9 +53,6 @@ function exibirQuizz(tela, quizz) {
         // console.log(resposta.data);
         // resposta.data.forEach(element => {
         // if (element.id === quizz) {
-        document.querySelector('main').classList.add('mainTela2')
-        document.querySelector('.criarQuizz').classList.add('escondido')
-        document.querySelector('.todosQuizzes').classList.add('escondido')
         // console.log(element.questions);
         const tela2 = document.querySelector('.tela2')
         tela2.innerHTML = "";
@@ -161,50 +157,27 @@ function selecionaResposta(elemento, numPergunta, resposta, indice) {
                 const levels = resposta.data.levels;
                 const tela2 = document.querySelector('.tela2')
                 console.log(qtdAcertos);
+                let nivelExibido = {};
                 if (qtdRespondidos === qtdPerguntas.length) {
-                    let percent = (qtdAcertos / qtdPerguntas.length).toFixed(2);
+                    let percent = Math.ceil((qtdAcertos / qtdPerguntas.length)*100);
                     for (let i = 0; i < levels.length; i++) {
                         console.log(percent);
-                        if (percent >= 0 && percent <= 0.09) {
-                            tela2.innerHTML += `
-                                <div class="caixa-resposta">
-                                    <h3>${levels[i].minValue}%:${levels[i].title} </h3>
-                                </div>
-                                <div class="imagem-resposta">
-                                    <img src=${levels[i].image}/>
-                                    <h4>${levels[i].text}</h4>
-                                </div>
-                            `
-                        } else if (Math.ceil((qtdAcertos * (levels[i].minValue / 100)) >= 50)) {
-                            console.log("Aqui2");
-                            tela2.innerHTML += `
-                                    <div class="caixa-resposta">
-                                        <h3>${levels[i].minValue}%:${levels[i].title} </h3>
-                                    </div>
-                                    <div class="imagem-resposta">
-                                        <img src=${levels[i].image}/>
-                                        <h4>${levels[i].text}</h4>
-                                    </div>
-                                `
-                        }
+                        if (percent >= levels[i].minValue || levels[i].minValue > nivelExibido.minValue) {                          
+                            nivelExibido = levels[i];
+                        } 
                     }
-                }
-                tela2.innerHTML += `<button class='p-perguntas' onclick="reiniciarQuizz()"><p>Reiniciar Quizz</p></button>
-                        <div class="back-home" onclick="voltarParaPaginaInicial()"><p>Voltar para home</p></div>
-                    `
-                if (qtdRespondidos === levels.length) {
-                    for (let i = 0; i < levels.length; i++) {
-                        tela2.innerHTML += `
-                            <div class="caixa-resposta">
-                                <h3>${levels[i].minValue}%:${levels[i].title} </h3>
-                            </div>
-                            <div class="imagem-resposta">
-                                <img src=${levels[i].image}/>
-                                <h4>${levels[i].text}</h4>
-                            </div>
+                    console.log(nivelExibido);
+                    tela2.innerHTML += `
+                        <div class="caixa-resposta">
+                            <h3>${nivelExibido.minValue}%:${nivelExibido.title} </h3>
+                        </div>
+                        <div class="imagem-resposta">
+                            <img src=${nivelExibido.image}/>
+                            <h4>${nivelExibido.text}</h4>
+                        </div>
+                        <button class='p-perguntas' onclick="reiniciarQuizz()"><p>Reiniciar Quizz</p></button>
+                            <div class="back-home" onclick="voltarParaPaginaInicial()"><p>Voltar para home</p></div>
                         `
-                    }
-
                 }
             });
             elemento.scrollIntoView();
@@ -220,7 +193,7 @@ function reiniciarQuizz() {
     window.scroll({
         top: 1
     });
-    exibirQuizz(quiz);
+    exibirQuizz(".criarQuizz",quiz);
 }
 
 function voltarParaPaginaInicial() {
@@ -252,8 +225,7 @@ function validaInformacoesBasicas() {
         novoQuizzTitulo = titulo;
         novoQuizzImagem = urlCorreta;
         limparCampos('tela3')
-        // criarPerguntas();
-        criarSucessoQuizz()
+        criarPerguntas();
 
     } else { //Caso seja falso, é exibido um alert e os inputs são limpos e a página recarregada.
         criarPerguntas();
@@ -619,10 +591,10 @@ function validaInformacoesNiveis() {
 
 function criarSucessoQuizz() {
 
-    const sucessoQuizz = document.querySelector(".tela3-sucessoQuizz"); //tela 3.1 onde cria as perguntas
-    const niveis = document.querySelector(".tela3-niveis"); //tela 3.1 onde cria as perguntas
-    niveis.classList.add("escondido"); //Some com a tela 3 inicial
-    sucessoQuizz.classList.remove("escondido"); //Faz aparecer a tela 3.1 onde cria as perguntas
+    const sucessoQuizz = document.querySelector(".tela3-sucessoQuizz"); 
+    const niveis = document.querySelector(".tela3-niveis"); 
+    niveis.classList.add("escondido"); 
+    sucessoQuizz.classList.remove("escondido"); 
     document.querySelector(".tela3-sucessoQuizz").classList.remove("escondido");
     document.querySelector(".tela3-niveis").classList.add("escondido");
     document.querySelector(".tela3").classList.add("escondido");
@@ -652,14 +624,11 @@ function criarSucessoQuizz() {
         <button class="p-perguntas" onclick ="exibirQuizz(${resposta.data.id})"><p> Acessar Quizz </p></button>
         <p> Voltar pra home </p>
         `;
-        // <img src= 'Rectangle 34.png' />
-        // <p>'quiz teste'</p>
         quizzFinalizado.innerHTML += `
         
         <button class="p-perguntas" onclick ="exibirQuizz('.tela3-sucessoQuizz',${resposta.data.id})"><p> Acessar Quizz </p></button>
         <p class='voltarHome' onclick='voltarHome()'> Voltar pra home </p>
         `;
-        // <button class="p-perguntas" onclick ="exibirQuizz('.tela3-sucessoQuizz',6049)"><p> Acessar Quizz </p></button>
     })
 
 }

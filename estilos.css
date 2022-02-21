@@ -323,6 +323,10 @@ figure .degradeBanner{
     overflow-y: hidden;
 }
 
+.inicio{
+    background-color: #FFFFFF;
+}
+
 input{
     border: 1px solid #D1D1D1;
     border-radius: 5px;
